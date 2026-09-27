@@ -3,7 +3,7 @@
   "range": "{{from, number}}–{{to, number}} de {{total, number}}",
   "none": {
     "title": "Aún no tienes etiquetas",
-    "text": "Organiza tu correo y Claude las crea por ti.",
+    "text": "Organiza tu correo y la IA las crea por ti.",
     "action": "Organizar ahora"
   },
   "noMatch": {

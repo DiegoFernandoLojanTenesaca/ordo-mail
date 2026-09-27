@@ -1,0 +1,45 @@
+{
+  "title": "Suscripciones",
+  "subtitle": "Boletines y listas de correo que te escriben. Date de baja de lo que nunca lees.",
+  "scan": "Buscar suscripciones",
+  "scanAgain": "Buscar otra vez",
+  "intro": {
+    "title": "Encuentra lo que nunca lees",
+    "text": "Ordo lee tus últimos {{count, number}} correos (solo remitentes y encabezados) y te muestra de quién puedes darte de baja."
+  },
+  "none": {
+    "title": "No hay suscripciones",
+    "text": "Nada de lo último que te llegó ofrece una forma de darse de baja."
+  },
+  "tabs": {
+    "all": "Todas",
+    "neverOpened": "Nunca abiertas"
+  },
+  "neverOpened": "Sin abrir",
+  "unsubscribe": "Darse de baja",
+  "methods": {
+    "oneClick": "Te da de baja aquí mismo con un clic",
+    "link": "Abre su página para darse de baja en tu navegador",
+    "mail": "Abre un correo para darse de baja en tu app de correo"
+  },
+  "status": {
+    "oneClick": "De baja",
+    "link": "Página abierta",
+    "mail": "Correo abierto"
+  },
+  "left": {
+    "oneClick": "Te diste de baja de {{name}}",
+    "link": "{{name}}: termina en la página que se abrió",
+    "mail": "{{name}}: envía el correo que se abrió"
+  },
+  "trash": "Borrar todo",
+  "trashConfirm": "¿Borrar todo? Clic otra vez",
+  "trashed_one": "{{count, number}} correo de {{name}} a la papelera",
+  "trashed_other": "{{count, number}} correos de {{name}} a la papelera",
+  "block": "Bloquear",
+  "blockConfirm": "¿Bloquear? Clic otra vez",
+  "blockedLabel": "Bloqueados",
+  "blocked": "El correo nuevo de {{name}} ahora va directo a la papelera",
+  "noMatch": "Nada coincide con la búsqueda.",
+  "note": "Darse de baja usa el enlace que incluye cada remitente: los de un clic terminan aquí, el resto abre su página o un correo. Bloquear agrega un filtro de Gmail que manda el correo nuevo a la papelera, con la etiqueta «Bloqueados»."
+}

@@ -21,18 +21,51 @@
     "help": "De la app y de los nombres de las etiquetas nuevas.",
     "system": "Sistema ({{name}})"
   },
-  "model": {
-    "title": "Modelo de Claude",
-    "help": "Claude se usa con tu suscripción de Claude Code."
+  "ai": {
+    "title": "Motor de IA",
+    "model": "Modelo",
+    "modelPlaceholder": "Nombre del modelo",
+    "loadModels": "Cargar modelos",
+    "url": "Dirección",
+    "urlPlaceholder": "https://api.ejemplo.com/v1",
+    "key": "Clave de API",
+    "keyPlaceholder": "Pega tu clave",
+    "saveKey": "Guardar clave",
+    "keySaved": "Clave guardada en el llavero del sistema",
+    "keyStored": "Guardada en el llavero del sistema",
+    "removeKey": "Quitar clave",
+    "removeKeyConfirm": "¿Quitar? Clic otra vez",
+    "keyRemoved": "Clave quitada"
   },
-  "models": {
-    "sonnet": "Sonnet · equilibrado",
-    "haiku": "Haiku · más rápido",
-    "opus": "Opus · el más listo"
+  "providers": {
+    "claudeCode": {
+      "name": "Claude Code · tu suscripción",
+      "help": "Usa tu suscripción de Claude. Necesita Claude Code instalado y con sesión iniciada en esta PC.",
+      "link": "Obtener Claude Code"
+    },
+    "anthropic": {
+      "name": "API de Claude · Anthropic",
+      "help": "Pagas por uso con una clave de la Claude Console. Remitentes y asuntos se envían a Anthropic.",
+      "link": "Obtener una clave"
+    },
+    "groq": {
+      "name": "Groq · rápido, con plan gratis",
+      "help": "Modelos abiertos a gran velocidad. Necesita una clave; remitentes y asuntos se envían a Groq.",
+      "link": "Obtener una clave"
+    },
+    "ollama": {
+      "name": "Ollama · 100 % local",
+      "help": "Nada sale de esta PC. Necesita Ollama abierto y un modelo descargado, por ejemplo qwen3.",
+      "link": "Descargar Ollama"
+    },
+    "openAiCompatible": {
+      "name": "Otro · compatible con OpenAI",
+      "help": "OpenRouter, LM Studio, vLLM o cualquier servicio compatible con OpenAI. Las direcciones locales no necesitan clave."
+    }
   },
   "limit": {
     "title": "Correos a revisar",
-    "help": "Cuántos correos lee Claude cada vez que organizas. Más correos, más remitentes y más tiempo."
+    "help": "Cuántos correos lee Ordo cada vez que organizas o buscas suscripciones. Más correos, más remitentes y más tiempo."
   },
   "cleanup": {
     "title": "Limpiar",
@@ -46,6 +79,11 @@
   "about": {
     "title": "Acerca de",
     "text": "{{app}} v{{version}}. Tus llaves se quedan en esta PC: el permiso de Google en el llavero del sistema y credentials.json en la carpeta de la app."
+  },
+  "update": {
+    "check": "Buscar actualizaciones",
+    "available": "Ordo {{version}} está listo: instálalo con el botón de arriba.",
+    "latest": "Tienes la última versión."
   },
   "save": "Guardar cambios",
   "saved": "Ajustes guardados",

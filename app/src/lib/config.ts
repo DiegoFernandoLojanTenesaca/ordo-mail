@@ -1,7 +1,9 @@
 import pkg from '../../package.json';
 import tauri from '../../src-tauri/tauri.conf.json';
 import type { Action } from './bindings/Action';
+import type { Provider } from './bindings/Provider';
 import type { Summary } from './bindings/Summary';
+import type { Unsubscribe } from './bindings/Unsubscribe';
 import type { IconName } from './icons';
 
 export const APP = { name: tauri.productName, version: pkg.version };
@@ -11,6 +13,13 @@ export const LINKS = {
   permissions: 'https://myaccount.google.com/permissions',
 };
 
+export const PROVIDER_LINKS: Partial<Record<Provider, string>> = {
+  claudeCode: 'https://claude.com/code',
+  anthropic: 'https://console.anthropic.com/settings/keys',
+  groq: 'https://console.groq.com/keys',
+  ollama: 'https://ollama.com/download',
+};
+
 export type GoogleColor = 'blue' | 'red' | 'yellow' | 'green';
 export const ACCENTS: GoogleColor[] = ['blue', 'red', 'yellow', 'green'];
 
@@ -18,6 +27,7 @@ export const NAV: { path: string; key: string; icon: IconName; activeIcon: IconN
   { path: '/', key: 'home', icon: 'home', activeIcon: 'homeFilled' },
   { path: '/organize', key: 'organize', icon: 'wandStars', activeIcon: 'wandStarsFilled' },
   { path: '/labels', key: 'labels', icon: 'label', activeIcon: 'labelFilled' },
+  { path: '/subscriptions', key: 'subscriptions', icon: 'unsubscribe', activeIcon: 'unsubscribeFilled' },
   { path: '/cleanup', key: 'cleanup', icon: 'delete', activeIcon: 'deleteFilled' },
   { path: '/settings', key: 'settings', icon: 'settings', activeIcon: 'settingsFilled' },
 ];
@@ -52,10 +62,22 @@ export const CLEANUP_TABS: { key: 'special' | 'labels'; icon: IconName; color: G
   { key: 'labels', icon: 'label', color: 'blue' },
 ];
 
+export const SUBSCRIPTION_TABS: { key: 'all' | 'neverOpened'; icon: IconName; color: GoogleColor }[] = [
+  { key: 'all', icon: 'mail', color: 'blue' },
+  { key: 'neverOpened', icon: 'visibilityOff', color: 'red' },
+];
+
+export const UNSUBSCRIBE_ICONS: Record<Unsubscribe, IconName> = {
+  none: 'block',
+  mail: 'mail',
+  link: 'openInNew',
+  oneClick: 'unsubscribe',
+};
+
 export const AGE_OPTIONS = [0, 7, 30, 90, 365];
 export const DEFAULT_SELECTION = ['SPAM', 'CATEGORY_PROMOTIONS'];
 export const CREDENTIAL_STEPS = ['project', 'consent', 'client', 'upload'];
-export const SEARCHABLE_PATHS = ['/labels', '/cleanup'];
+export const SEARCHABLE_PATHS = ['/labels', '/subscriptions', '/cleanup'];
 export const SEARCH_SHORTCUT = '/';
 
 export const CONFIRM_MS = 4000;

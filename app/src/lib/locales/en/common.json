@@ -4,13 +4,14 @@
     "home": "Home",
     "organize": "Organize",
     "labels": "Labels",
+    "subscriptions": "Subscriptions",
     "cleanup": "Clean up",
     "settings": "Settings"
   },
   "organizeNow": "Organize now",
   "labelsSection": "Labels",
-  "createLabels": "Create labels with Claude",
-  "footer": "v{{version}} · with Claude",
+  "createLabels": "Create labels with AI",
+  "footer": "v{{version}}",
   "menu": "Main menu",
   "search": {
     "placeholder": "Search labels and senders",
@@ -24,6 +25,10 @@
   "theme": {
     "toLight": "Use light mode",
     "toDark": "Use dark mode"
+  },
+  "update": {
+    "install": "Update to {{version}}",
+    "installing": "Updating {{percent}}%"
   },
   "actions": {
     "label": "Label",

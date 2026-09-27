@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
-use engine::{Gmail, Settings, Storage, cleanup, organize, rules};
+use engine::model::Unsubscribe;
+use engine::{Gmail, Settings, Storage, cleanup, organize, rules, subscriptions};
 
 const SERVICE: &str = "com.lojan.ordo";
 
@@ -26,4 +27,12 @@ fn reads_the_real_mailbox_without_changing_it() {
     let items = cleanup::items(&gmail, &settings, settings.cleanup_days).expect("cleanup items");
     assert!(items.iter().filter(|i| i.protected).all(|i| i.total == 0));
     assert!(items.iter().any(|i| i.special));
+    let found = subscriptions::scan(&gmail, &Settings { limit: 300, ..settings }, &|_| {}).expect("subscriptions");
+    assert!(
+        found
+            .iter()
+            .all(|s| s.count >= 2 && s.unread <= s.count && s.unsubscribe != Unsubscribe::None)
+    );
+    assert!(found.windows(2).all(|w| w[0].count >= w[1].count));
+    println!("{} subscriptions in the last 300 messages", found.len());
 }

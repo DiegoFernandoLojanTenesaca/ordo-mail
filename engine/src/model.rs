@@ -82,6 +82,26 @@ pub struct CleanupItem {
     pub special: bool,
 }
 
+#[derive(Serialize, Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, TS)]
+#[serde(rename_all = "camelCase")]
+#[ts(export)]
+pub enum Unsubscribe {
+    None,
+    Mail,
+    Link,
+    OneClick,
+}
+
+#[derive(Serialize, TS)]
+#[ts(export)]
+pub struct Subscription {
+    pub email: String,
+    pub name: String,
+    pub count: usize,
+    pub unread: usize,
+    pub unsubscribe: Unsubscribe,
+}
+
 #[derive(Serialize, Clone, Copy, Debug, PartialEq, Eq, TS)]
 #[serde(rename_all = "camelCase")]
 #[ts(export)]

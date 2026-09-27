@@ -4,7 +4,8 @@ use std::path::{Path, PathBuf};
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
-use crate::config::{CREDENTIALS_FILE, KEYRING_USER, LABEL_LENGTH, LOCALE_LENGTH, SETTINGS_FILE};
+use crate::ai::{AiSettings, Provider, ProviderInfo};
+use crate::config::{CREDENTIALS_FILE, LABEL_LENGTH, LOCALE_LENGTH, SETTINGS_FILE};
 use crate::error::{ErrorCode, Result};
 
 #[derive(Clone)]
@@ -35,48 +36,26 @@ impl Storage {
         Ok(())
     }
 
-    fn token_entry(&self) -> Result<keyring::Entry> {
-        Ok(keyring::Entry::new(&self.service, KEYRING_USER)?)
+    fn entry(&self, name: &str) -> Result<keyring::Entry> {
+        Ok(keyring::Entry::new(&self.service, name)?)
     }
 
-    pub fn load_token(&self) -> Result<Option<String>> {
-        match self.token_entry()?.get_password() {
-            Ok(token) => Ok(Some(token)),
+    pub fn load_secret(&self, name: &str) -> Result<Option<String>> {
+        match self.entry(name)?.get_password() {
+            Ok(secret) => Ok(Some(secret)),
             Err(keyring::Error::NoEntry) => Ok(None),
             Err(e) => Err(e.into()),
         }
     }
 
-    pub fn save_token(&self, token: &str) -> Result<()> {
-        Ok(self.token_entry()?.set_password(token)?)
+    pub fn save_secret(&self, name: &str, secret: &str) -> Result<()> {
+        Ok(self.entry(name)?.set_password(secret)?)
     }
 
-    pub fn clear_token(&self) -> Result<()> {
-        match self.token_entry()?.delete_credential() {
+    pub fn clear_secret(&self, name: &str) -> Result<()> {
+        match self.entry(name)?.delete_credential() {
             Ok(()) | Err(keyring::Error::NoEntry) => Ok(()),
             Err(e) => Err(e.into()),
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug, Default, TS)]
-#[serde(rename_all = "camelCase")]
-#[ts(export)]
-pub enum ClaudeModel {
-    #[default]
-    Sonnet,
-    Haiku,
-    Opus,
-}
-
-impl ClaudeModel {
-    pub const ALL: [ClaudeModel; 3] = [ClaudeModel::Sonnet, ClaudeModel::Haiku, ClaudeModel::Opus];
-
-    pub fn cli_name(self) -> &'static str {
-        match self {
-            ClaudeModel::Sonnet => "sonnet",
-            ClaudeModel::Haiku => "haiku",
-            ClaudeModel::Opus => "opus",
         }
     }
 }
@@ -98,7 +77,7 @@ impl Theme {
 #[derive(Serialize, TS)]
 #[ts(export)]
 pub struct Catalog {
-    pub models: Vec<ClaudeModel>,
+    pub providers: Vec<ProviderInfo>,
     pub themes: Vec<Theme>,
     pub label_max_length: usize,
 }
@@ -106,7 +85,7 @@ pub struct Catalog {
 impl Catalog {
     pub fn get() -> Self {
         Self {
-            models: ClaudeModel::ALL.to_vec(),
+            providers: Provider::ALL.into_iter().map(Provider::info).collect(),
             themes: Theme::ALL.to_vec(),
             label_max_length: LABEL_LENGTH,
         }
@@ -117,7 +96,7 @@ impl Catalog {
 #[serde(default)]
 #[ts(export)]
 pub struct Settings {
-    pub model: ClaudeModel,
+    pub ai: AiSettings,
     pub limit: usize,
     pub cleanup_days: u32,
     pub protected: Vec<String>,
@@ -128,7 +107,7 @@ pub struct Settings {
 impl Default for Settings {
     fn default() -> Self {
         Self {
-            model: ClaudeModel::default(),
+            ai: AiSettings::default(),
             limit: 2000,
             cleanup_days: 30,
             protected: Vec::new(),
@@ -150,6 +129,7 @@ impl Settings {
         if self.locale.as_deref().is_some_and(|l| !valid_locale(l)) {
             return Err(ErrorCode::InvalidLocale.into());
         }
+        self.ai.validate()?;
         storage.write(&storage.settings(), &serde_json::to_string_pretty(self)?)
     }
 

@@ -8,8 +8,8 @@
     "spam": "In spam"
   },
   "hero": {
-    "title": "Organize your inbox with Claude",
-    "text": "Claude looks at who writes to you and suggests a label for each sender. You review it and nothing changes until you accept.",
+    "title": "Organize your inbox with AI",
+    "text": "The AI looks at who writes to you and suggests a label for each sender. You review it and nothing changes until you accept.",
     "organizeNew": "Organize new mail",
     "reorganize": "Reorganize everything",
     "cleanup": "Clean up"
@@ -17,7 +17,7 @@
   "how": {
     "title": "How it works",
     "read": {
-      "title": "Claude reads",
+      "title": "The AI reads",
       "text": "Only the name, sender and subject, never the content of your messages."
     },
     "decide": {

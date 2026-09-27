@@ -1,9 +1,7 @@
-- Added organizing new mail with Claude, one precise label per sender
-- Added reorganizing everything, moving senders out of generic labels with their filters and old messages
-- Added labels view with counts, senders, quick actions, rename, add sender, protect, empty and delete
-- Added clean up of spam, promotions, social and labels by age, always to the trash
-- Added Gmail style interface with search, label sidebar, light and dark mode
-- Added English and Spanish, with new label names in the chosen language
-- Added storage of the Google permission in the system keychain
-- Added TypeScript types generated from the Rust engine
-- Added live checks against Claude and a read only pass over the real mailbox
+- Added AI engines: Claude Code, Claude API, Groq, Ollama (100% local) and any OpenAI compatible service
+- Added API keys stored in the system keychain, a model picker and a custom address for local servers
+- Added Subscriptions: find newsletters, spot the ones you never open, unsubscribe, trash all or block
+- Added one click unsubscribe (RFC 8058) that only calls public https links
+- Added automatic updates: Ordo checks on launch and installs signed releases with one click
+- Changed large mailboxes to be classified in batches that share the labels they create
+- Changed the texts to speak about the AI instead of Claude

@@ -1,5 +1,6 @@
+pub mod ai;
 pub mod auth;
-pub mod claude;
+mod classifier;
 pub mod cleanup;
 pub mod config;
 pub mod error;
@@ -8,6 +9,7 @@ pub mod model;
 pub mod organize;
 pub mod rules;
 pub mod settings;
+pub mod subscriptions;
 mod text;
 
 pub use error::{Error, ErrorCode, Result};

@@ -21,18 +21,51 @@
     "help": "For the app and for the names of new labels.",
     "system": "System ({{name}})"
   },
-  "model": {
-    "title": "Claude model",
-    "help": "Claude runs with your Claude Code subscription."
+  "ai": {
+    "title": "AI engine",
+    "model": "Model",
+    "modelPlaceholder": "Model name",
+    "loadModels": "Load models",
+    "url": "Address",
+    "urlPlaceholder": "https://api.example.com/v1",
+    "key": "API key",
+    "keyPlaceholder": "Paste your key",
+    "saveKey": "Save key",
+    "keySaved": "Key saved in the system keychain",
+    "keyStored": "Saved in the system keychain",
+    "removeKey": "Remove key",
+    "removeKeyConfirm": "Remove? Click again",
+    "keyRemoved": "Key removed"
   },
-  "models": {
-    "sonnet": "Sonnet · balanced",
-    "haiku": "Haiku · fastest",
-    "opus": "Opus · smartest"
+  "providers": {
+    "claudeCode": {
+      "name": "Claude Code · your subscription",
+      "help": "Uses your Claude subscription. Needs Claude Code installed and signed in on this computer.",
+      "link": "Get Claude Code"
+    },
+    "anthropic": {
+      "name": "Claude API · Anthropic",
+      "help": "Pay per use with a key from the Claude Console. Senders and subjects are sent to Anthropic.",
+      "link": "Get a key"
+    },
+    "groq": {
+      "name": "Groq · fast, with a free tier",
+      "help": "Open models at high speed. Needs a key; senders and subjects are sent to Groq.",
+      "link": "Get a key"
+    },
+    "ollama": {
+      "name": "Ollama · 100% local",
+      "help": "Nothing leaves this computer. Needs Ollama running and a model pulled, for example qwen3.",
+      "link": "Download Ollama"
+    },
+    "openAiCompatible": {
+      "name": "Other · OpenAI compatible",
+      "help": "OpenRouter, LM Studio, vLLM or any OpenAI compatible service. Local addresses work without a key."
+    }
   },
   "limit": {
     "title": "Messages to review",
-    "help": "How many messages Claude reads each time you organize. More messages means more senders and more time."
+    "help": "How many messages Ordo reads each time you organize or look for subscriptions. More messages means more senders and more time."
   },
   "cleanup": {
     "title": "Clean up",
@@ -46,6 +79,11 @@
   "about": {
     "title": "About",
     "text": "{{app}} v{{version}}. Your keys stay on this computer: the Google permission in the system keychain and credentials.json in the app folder."
+  },
+  "update": {
+    "check": "Check for updates",
+    "available": "Ordo {{version}} is ready: install it with the button at the top.",
+    "latest": "You have the latest version."
   },
   "save": "Save changes",
   "saved": "Settings saved",

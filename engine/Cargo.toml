@@ -1,6 +1,6 @@
 [package]
 name = "engine"
-description = "Ordo engine: Gmail, Claude, rules and cleanup"
+description = "Ordo engine: Gmail, AI providers, rules, subscriptions and clean up"
 edition.workspace = true
 license.workspace = true
 
@@ -14,3 +14,4 @@ serde_json.workspace = true
 sha2 = "0.11"
 ts-rs = "12"
 ureq = { version = "3", features = ["json"] }
+url = "2"

@@ -3,6 +3,7 @@ import type { CleanupItem } from './bindings/CleanupItem';
 import type { Label } from './bindings/Label';
 import type { Proposal } from './bindings/Proposal';
 import type { Settings } from './bindings/Settings';
+import type { Subscription } from './bindings/Subscription';
 
 const DELAY_MS = 250;
 const ANALYZE_DELAY_MS = 900;
@@ -37,7 +38,22 @@ const cleanup: CleanupItem[] = [
   ...labels.map((l) => ({ id: l.id, name: l.name, total: l.protected ? 0 : Math.round(l.total * 0.7), complete: true, protected: l.protected, special: false })),
 ];
 
-let settings: Settings = { model: 'sonnet', limit: 2000, cleanup_days: 30, protected: ['Finance/Bank', 'Important'], theme: 'system', locale: null };
+const subscriptions: Subscription[] = [
+  { email: 'news@shop.example', name: 'Shop Weekly', count: 64, unread: 64, unsubscribe: 'oneClick' },
+  { email: 'digest@forum.example', name: 'Forum Digest', count: 41, unread: 12, unsubscribe: 'link' },
+  { email: 'offers@travel.example', name: 'Travel Offers', count: 27, unread: 27, unsubscribe: 'mail' },
+  { email: 'hello@course.example', name: 'Course Updates', count: 9, unread: 2, unsubscribe: 'oneClick' },
+];
+
+const providers = [
+  { provider: 'claudeCode', default_model: 'sonnet', default_base_url: null, needs_key: false, accepts_key: false, custom_url: false, local: false },
+  { provider: 'anthropic', default_model: 'claude-opus-5', default_base_url: 'https://api.anthropic.com/v1', needs_key: true, accepts_key: true, custom_url: false, local: false },
+  { provider: 'groq', default_model: null, default_base_url: 'https://api.groq.com/openai/v1', needs_key: true, accepts_key: true, custom_url: false, local: false },
+  { provider: 'ollama', default_model: null, default_base_url: 'http://localhost:11434/v1', needs_key: false, accepts_key: false, custom_url: true, local: true },
+  { provider: 'openAiCompatible', default_model: null, default_base_url: null, needs_key: false, accepts_key: true, custom_url: true, local: false },
+];
+
+let settings: Settings = { ai: { provider: 'claudeCode', model: 'sonnet', base_url: null }, limit: 2000, cleanup_days: 30, protected: ['Finance/Bank', 'Important'], theme: 'system', locale: null };
 const status = { has_credentials: true, account: 'maria.lopez@gmail.com' as string | null };
 
 const answers: Record<string, (args?: Record<string, unknown>) => unknown> = {
@@ -55,10 +71,17 @@ const answers: Record<string, (args?: Record<string, unknown>) => unknown> = {
   remove_rule: () => undefined,
   cleanup_items: () => cleanup,
   clean: () => 6842,
+  subscriptions: () => subscriptions,
+  unsubscribe: (args) => subscriptions.find((s) => s.email === args?.email)?.unsubscribe,
+  trash_sender: (args) => subscriptions.find((s) => s.email === args?.email)?.count ?? 0,
+  list_models: () => ['llama-3.3-70b-versatile', 'openai/gpt-oss-120b', 'qwen/qwen3-32b'],
+  api_keys: () => ['groq'],
+  save_api_key: () => undefined,
+  clear_api_key: () => undefined,
   settings: () => settings,
   save_settings: (args) => void (settings = args?.settings as Settings),
   protect: () => undefined,
-  catalog: () => ({ models: ['sonnet', 'haiku', 'opus'], themes: ['system', 'light', 'dark'], label_max_length: 40 }),
+  catalog: () => ({ providers, themes: ['system', 'light', 'dark'], label_max_length: 40 }),
 };
 
 export async function mock<T>(command: string, args?: Record<string, unknown>): Promise<T> {

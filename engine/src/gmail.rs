@@ -5,16 +5,32 @@ use std::{thread, time::Duration};
 use serde_json::{Value, json};
 
 use crate::auth::{self, Client, LoginPage};
-use crate::config::{BATCH_SIZE, COUNT_CAP, GMAIL_API, MAX_BACKOFF_SECS, MAX_RETRIES, PAGE_SIZE, PROGRESS_EVERY, QUERY_SPAM, THREADS};
+use crate::config::{
+    BATCH_SIZE, COUNT_CAP, GMAIL_API, KEYRING_TOKEN, MAX_BACKOFF_SECS, MAX_RETRIES, PAGE_SIZE, PROGRESS_EVERY, QUERY_ANYWHERE, QUERY_SPAM,
+    THREADS,
+};
 use crate::error::{Error, ErrorCode, Result};
-use crate::model::{Phase, Progress, Report};
+use crate::model::{Phase, Progress, Report, Unsubscribe};
 use crate::settings::Storage;
-use crate::text::{email_of, encode, name_of};
+use crate::text::{email_of, encode, name_of, unsubscribe_kind};
 
 pub(crate) struct Message {
     pub from: String,
     pub name: String,
     pub subject: String,
+    pub unread: bool,
+    pub unsubscribe: Unsubscribe,
+}
+
+pub(crate) fn header(message: &Value, name: &str) -> String {
+    message["payload"]["headers"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .find(|h| h["name"].as_str().is_some_and(|n| n.eq_ignore_ascii_case(name)))
+        .and_then(|h| h["value"].as_str())
+        .unwrap_or_default()
+        .to_string()
 }
 
 pub struct Gmail {
@@ -31,7 +47,7 @@ fn agent() -> ureq::Agent {
 
 impl Gmail {
     pub fn restore(storage: &Storage) -> Result<Option<Self>> {
-        let Some(refresh_token) = storage.load_token()? else {
+        let Some(refresh_token) = storage.load_secret(KEYRING_TOKEN)? else {
             return Ok(None);
         };
         let (agent, client) = (agent(), Client::load(storage)?);
@@ -45,7 +61,7 @@ impl Gmail {
     pub fn login(storage: &Storage, page: &LoginPage) -> Result<Self> {
         let (agent, client) = (agent(), Client::load(storage)?);
         let (access, refresh_token) = auth::login(&agent, &client, page)?;
-        storage.save_token(&refresh_token)?;
+        storage.save_secret(KEYRING_TOKEN, &refresh_token)?;
         Self::open(agent, client, refresh_token, access)
     }
 
@@ -141,7 +157,7 @@ impl Gmail {
         let mut page: Option<String> = None;
         while ids.len() < limit {
             let mut path = format!("/messages?maxResults={PAGE_SIZE}&q={}", encode(query));
-            if query.contains(QUERY_SPAM) {
+            if query.contains(QUERY_SPAM) || query.contains(QUERY_ANYWHERE) {
                 path += "&includeSpamTrash=true";
             }
             if let Some(p) = &page {
@@ -179,34 +195,30 @@ impl Gmail {
         Ok(())
     }
 
+    pub(crate) fn metadata(&self, id: &str) -> Result<Value> {
+        self.get(&format!(
+            "/messages/{id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=List-Unsubscribe&metadataHeaders=List-Unsubscribe-Post"
+        ))
+    }
+
     pub(crate) fn read(&self, query: &str, limit: usize, report: Report) -> Result<(Vec<Message>, usize)> {
         report(Progress::new(Phase::Searching, 0, 0));
         let ids = self.search(query, limit)?;
         let done = AtomicUsize::new(0);
         let messages = parallel(&ids, |id| {
-            let message = self.get(&format!(
-                "/messages/{id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject"
-            ));
+            let message = self.metadata(id);
             let n = done.fetch_add(1, Ordering::Relaxed) + 1;
             if n.is_multiple_of(PROGRESS_EVERY) || n == ids.len() {
                 report(Progress::new(Phase::Reading, n, ids.len()));
             }
             message.ok().map(|m| {
-                let header = |name: &str| {
-                    m["payload"]["headers"]
-                        .as_array()
-                        .into_iter()
-                        .flatten()
-                        .find(|h| h["name"] == name)
-                        .and_then(|h| h["value"].as_str())
-                        .unwrap_or_default()
-                        .to_string()
-                };
-                let from = header("From");
+                let from = header(&m, "From");
                 Message {
                     from: email_of(&from),
                     name: name_of(&from),
-                    subject: header("Subject"),
+                    subject: header(&m, "Subject"),
+                    unread: m["labelIds"].as_array().is_some_and(|l| l.iter().any(|l| l == "UNREAD")),
+                    unsubscribe: unsubscribe_kind(&header(&m, "List-Unsubscribe"), &header(&m, "List-Unsubscribe-Post")),
                 }
             })
         });

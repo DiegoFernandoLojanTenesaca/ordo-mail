@@ -1,11 +1,12 @@
 use std::cmp::Reverse;
 use std::collections::HashMap;
 
-use crate::claude::{self, Sample};
-use crate::config::{MAX_SENDERS_FOR_CLAUDE, MIN_MESSAGES_PER_SENDER, QUERY_ALL, QUERY_SPAM, QUERY_UNLABELED, SUBJECTS_PER_SENDER};
+use crate::ai;
+use crate::classifier::{self, Sample};
+use crate::config::{MAX_SENDERS_FOR_AI, MIN_MESSAGES_PER_SENDER, QUERY_ALL, QUERY_SPAM, QUERY_UNLABELED, SUBJECTS_PER_SENDER};
 use crate::error::Result;
 use crate::gmail::Gmail;
-use crate::model::{Action, Group, Phase, Progress, Proposal, Report, Sender, Summary};
+use crate::model::{Action, Group, Proposal, Report, Sender, Summary};
 use crate::rules::{destination_of, destinations};
 use crate::settings::Settings;
 
@@ -20,7 +21,7 @@ pub fn summary(gmail: &Gmail) -> Result<Summary> {
     })
 }
 
-pub fn analyze(gmail: &Gmail, settings: &Settings, reorganize: bool, locale: &str, report: Report) -> Result<Proposal> {
+pub fn analyze(gmail: &Gmail, settings: &Settings, ai: &ai::Client, reorganize: bool, locale: &str, report: Report) -> Result<Proposal> {
     let query = if reorganize { QUERY_ALL } else { QUERY_UNLABELED };
     let (messages, failed) = gmail.read(query, settings.limit, report)?;
     let own = gmail.user_labels()?;
@@ -47,7 +48,7 @@ pub fn analyze(gmail: &Gmail, settings: &Settings, reorganize: bool, locale: &st
         .filter(|s| s.count >= MIN_MESSAGES_PER_SENDER && s.email != gmail.account)
         .collect();
     samples.sort_by_key(|s| Reverse(s.count));
-    samples.truncate(MAX_SENDERS_FOR_CLAUDE);
+    samples.truncate(MAX_SENDERS_FOR_AI);
     let read = messages.len();
     if samples.is_empty() {
         return Ok(Proposal {
@@ -57,7 +58,6 @@ pub fn analyze(gmail: &Gmail, settings: &Settings, reorganize: bool, locale: &st
         });
     }
 
-    report(Progress::about(Phase::Thinking, samples.len().to_string(), 0, 0));
     let existing: Vec<String> = own.iter().map(|(_, name)| name.clone()).collect();
     let count_of = |sender: &str| -> usize {
         samples
@@ -66,7 +66,7 @@ pub fn analyze(gmail: &Gmail, settings: &Settings, reorganize: bool, locale: &st
             .map(|s| s.count)
             .sum()
     };
-    let mut groups: Vec<Group> = claude::classify(settings.model, locale, &samples, &existing)?
+    let mut groups: Vec<Group> = classifier::classify(|p| ai.complete_json(p), ai.batch(), locale, &samples, &existing, report)?
         .into_iter()
         .map(|(label, senders)| Group {
             is_new: !existing.iter().any(|e| e.eq_ignore_ascii_case(&label)),

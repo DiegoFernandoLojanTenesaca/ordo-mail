@@ -1,12 +1,13 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import Button from './Button.svelte';
   import Icon from './Icon.svelte';
   import { appWindow } from '$lib/api';
   import { APP, SEARCH_SHORTCUT, SEARCHABLE_PATHS } from '$lib/config';
   import { labelColor } from '$lib/format';
   import { t } from '$lib/i18n.svelte';
-  import { app, updateAppearance } from '$lib/store.svelte';
+  import { app, installUpdate, updateAppearance } from '$lib/store.svelte';
 
   let search = $state<HTMLInputElement>();
 
@@ -47,6 +48,11 @@
   {/if}
 
   <div class="end" data-tauri-drag-region>
+    {#if app.update}
+      <Button variant="primary" size="sm" icon="upgrade" loading={app.updating !== null} onclick={installUpdate}>
+        {app.updating === null ? t('update.install', { version: app.update }) : t('update.installing', { percent: app.updating })}
+      </Button>
+    {/if}
     {#if app.settings}
       <button class="round" onclick={() => updateAppearance({ theme: dark ? 'light' : 'dark' })} title={t(dark ? 'theme.toLight' : 'theme.toDark')} aria-label={t(dark ? 'theme.toLight' : 'theme.toDark')}>
         <Icon name={dark ? 'lightMode' : 'darkMode'} size="lg" />

@@ -8,6 +8,7 @@
   import ProgressBar from '$lib/components/ProgressBar.svelte';
   import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
+  import Tabs from '$lib/components/Tabs.svelte';
   import { api } from '$lib/api';
   import type { CleanupItem } from '$lib/bindings/CleanupItem';
   import { AGE_OPTIONS, CLEANUP_TABS, DEFAULT_SELECTION, SPECIAL_FOLDERS } from '$lib/config';
@@ -35,6 +36,9 @@
   const pickable = $derived(list.filter((i) => !i.protected));
   const all = $derived(pickable.length > 0 && pickable.every((i) => chosen.includes(i.id)));
   const some = $derived(!all && pickable.some((i) => chosen.includes(i.id)));
+  const tabs = $derived(
+    CLEANUP_TABS.map((item) => ({ ...item, text: t(`cleanup:tabs.${item.key}`), count: inTab(item.key).filter((i) => chosen.includes(i.id) && !i.protected).length })),
+  );
   const ageOptions = $derived(AGE_OPTIONS.map((d) => ({ value: d, text: d ? t('cleanup:ageOlder', { count: d }) : t('cleanup:ageAll') })));
 
   function toggle(item: CleanupItem) {
@@ -79,15 +83,7 @@
     {/if}
   </div>
 
-  <div class="tabs" role="tablist">
-    {#each CLEANUP_TABS as item (item.key)}
-      {@const picked = inTab(item.key).filter((i) => chosen.includes(i.id) && !i.protected).length}
-      <button role="tab" aria-selected={tab === item.key} class:active={tab === item.key} style:--tab-color="var(--google-{item.color})" onclick={() => (tab = item.key)}>
-        <Icon name={item.icon} />{t(`cleanup:tabs.${item.key}`)}
-        {#if picked}<span class="count">{picked}</span>{/if}
-      </button>
-    {/each}
-  </div>
+  <Tabs {tabs} bind:active={tab} />
 
   {#if !items}
     <Skeleton rows={4} />
@@ -114,15 +110,6 @@
   .progress { width: var(--column-side); }
   .select-all { border: 0; background: transparent; padding: var(--space-2); border-radius: 50%; cursor: pointer; display: grid; }
   .select-all:hover { background: var(--hover); }
-  .tabs { display: flex; border-bottom: var(--hairline) solid var(--border); padding: 0 var(--space-2); }
-  .tabs button {
-    display: flex; align-items: center; gap: var(--space-3); height: var(--control-xl); padding: 0 var(--space-4); min-width: var(--tab-width);
-    border: 0; border-bottom: var(--bar) solid transparent; background: transparent; color: var(--text-2);
-    font-size: var(--text-md); font-weight: var(--weight-medium); cursor: pointer; transition: background var(--transition);
-  }
-  .tabs button:hover { background: var(--hover); }
-  .tabs button.active { color: var(--tab-color); border-bottom-color: var(--tab-color); }
-  .count { margin-left: auto; font-size: var(--text-xs); background: var(--tab-color); color: var(--surface); border-radius: var(--radius-pill); padding: 0 var(--space-2); }
   .item {
     width: 100%; display: flex; align-items: center; gap: var(--space-4); height: var(--control-lg); padding: 0 var(--space-5) 0 var(--space-4);
     background: transparent; border: 0; border-bottom: var(--hairline) solid var(--border); color: var(--text-1);

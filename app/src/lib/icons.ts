@@ -1,5 +1,6 @@
 import add from '@material-symbols/svg-400/outlined/add.svg?raw';
 import archive from '@material-symbols/svg-400/outlined/archive.svg?raw';
+import block from '@material-symbols/svg-400/outlined/block.svg?raw';
 import check from '@material-symbols/svg-400/outlined/check.svg?raw';
 import checkCircle from '@material-symbols/svg-400/outlined/check_circle.svg?raw';
 import cleaningServices from '@material-symbols/svg-400/outlined/cleaning_services.svg?raw';
@@ -15,6 +16,7 @@ import home from '@material-symbols/svg-400/outlined/home.svg?raw';
 import howToReg from '@material-symbols/svg-400/outlined/how_to_reg.svg?raw';
 import inbox from '@material-symbols/svg-400/outlined/inbox.svg?raw';
 import info from '@material-symbols/svg-400/outlined/info.svg?raw';
+import key from '@material-symbols/svg-400/outlined/key.svg?raw';
 import label from '@material-symbols/svg-400/outlined/label.svg?raw';
 import language from '@material-symbols/svg-400/outlined/language.svg?raw';
 import lightMode from '@material-symbols/svg-400/outlined/light_mode.svg?raw';
@@ -22,6 +24,7 @@ import lock from '@material-symbols/svg-400/outlined/lock.svg?raw';
 import lockOpen from '@material-symbols/svg-400/outlined/lock_open.svg?raw';
 import login from '@material-symbols/svg-400/outlined/login.svg?raw';
 import logout from '@material-symbols/svg-400/outlined/logout.svg?raw';
+import mail from '@material-symbols/svg-400/outlined/mail.svg?raw';
 import markEmailRead from '@material-symbols/svg-400/outlined/mark_email_read.svg?raw';
 import menu from '@material-symbols/svg-400/outlined/menu.svg?raw';
 import newLabel from '@material-symbols/svg-400/outlined/new_label.svg?raw';
@@ -35,18 +38,23 @@ import search from '@material-symbols/svg-400/outlined/search.svg?raw';
 import settings from '@material-symbols/svg-400/outlined/settings.svg?raw';
 import shoppingBag from '@material-symbols/svg-400/outlined/shopping_bag.svg?raw';
 import swapHoriz from '@material-symbols/svg-400/outlined/swap_horiz.svg?raw';
+import unsubscribe from '@material-symbols/svg-400/outlined/unsubscribe.svg?raw';
+import upgrade from '@material-symbols/svg-400/outlined/upgrade.svg?raw';
 import upload from '@material-symbols/svg-400/outlined/upload.svg?raw';
+import visibilityOff from '@material-symbols/svg-400/outlined/visibility_off.svg?raw';
 import wandStars from '@material-symbols/svg-400/outlined/wand_stars.svg?raw';
 import warning from '@material-symbols/svg-400/outlined/warning.svg?raw';
 import trashFilled from '@material-symbols/svg-400/outlined/delete-fill.svg?raw';
 import homeFilled from '@material-symbols/svg-400/outlined/home-fill.svg?raw';
 import labelFilled from '@material-symbols/svg-400/outlined/label-fill.svg?raw';
 import settingsFilled from '@material-symbols/svg-400/outlined/settings-fill.svg?raw';
+import unsubscribeFilled from '@material-symbols/svg-400/outlined/unsubscribe-fill.svg?raw';
 import wandStarsFilled from '@material-symbols/svg-400/outlined/wand_stars-fill.svg?raw';
 
 export const ICONS = {
   add,
   archive,
+  block,
   check,
   checkCircle,
   cleaningServices,
@@ -62,6 +70,7 @@ export const ICONS = {
   howToReg,
   inbox,
   info,
+  key,
   label,
   language,
   lightMode,
@@ -69,6 +78,7 @@ export const ICONS = {
   lockOpen,
   login,
   logout,
+  mail,
   markEmailRead,
   menu,
   newLabel,
@@ -82,13 +92,17 @@ export const ICONS = {
   settings,
   shoppingBag,
   swapHoriz,
+  unsubscribe,
+  upgrade,
   upload,
+  visibilityOff,
   wandStars,
   warning,
   deleteFilled: trashFilled,
   homeFilled,
   labelFilled,
   settingsFilled,
+  unsubscribeFilled,
   wandStarsFilled,
 } as const;
 

@@ -1,9 +1,11 @@
 use std::sync::{Arc, RwLock};
 
+use engine::ai::{self, Provider};
 use engine::auth::{self, LoginPage};
-use engine::model::{Action, CleanupItem, Group, Label, Proposal, Report, Status, Summary};
+use engine::config::KEYRING_TOKEN;
+use engine::model::{Action, CleanupItem, Group, Label, Proposal, Report, Status, Subscription, Summary, Unsubscribe};
 use engine::settings::Catalog;
-use engine::{Error, ErrorCode, Gmail, Result, Settings, Storage, cleanup, organize, rules};
+use engine::{Error, ErrorCode, Gmail, Result, Settings, Storage, cleanup, organize, rules, subscriptions};
 use tauri::{AppHandle, Emitter, Manager};
 
 struct Session {
@@ -72,7 +74,7 @@ async fn connect(app: AppHandle, page: LoginPage) -> Result<Status> {
 #[tauri::command]
 fn disconnect(app: AppHandle) -> Result<Status> {
     let session = app.state::<Session>();
-    session.storage.clear_token()?;
+    session.storage.clear_secret(KEYRING_TOKEN)?;
     *session.gmail.write().unwrap() = None;
     Ok(session.status())
 }
@@ -84,7 +86,12 @@ async fn summary(app: AppHandle) -> Result<Summary> {
 
 #[tauri::command]
 async fn analyze(app: AppHandle, reorganize: bool, locale: String) -> Result<Proposal> {
-    with_gmail(&app, move |g, s, report| organize::analyze(g, s, reorganize, &locale, report)).await
+    let storage = app.state::<Session>().storage.clone();
+    with_gmail(&app, move |g, s, report| {
+        let client = ai::Client::load(&storage, &s.ai)?;
+        organize::analyze(g, s, &client, reorganize, &locale, report)
+    })
+    .await
 }
 
 #[tauri::command]
@@ -135,6 +142,42 @@ async fn clean(app: AppHandle, ids: Vec<String>, days: u32) -> Result<usize> {
 }
 
 #[tauri::command]
+async fn subscriptions(app: AppHandle) -> Result<Vec<Subscription>> {
+    with_gmail(&app, |g, s, report| subscriptions::scan(g, s, report)).await
+}
+
+#[tauri::command]
+async fn unsubscribe(app: AppHandle, email: String) -> Result<Unsubscribe> {
+    with_gmail(&app, move |g, _, _| subscriptions::unsubscribe(g, &email)).await
+}
+
+#[tauri::command]
+async fn trash_sender(app: AppHandle, email: String) -> Result<usize> {
+    with_gmail(&app, move |g, s, _| cleanup::trash_sender(g, s, &email)).await
+}
+
+#[tauri::command]
+async fn list_models(app: AppHandle, provider: Provider, base_url: Option<String>) -> Result<Vec<String>> {
+    let storage = app.state::<Session>().storage.clone();
+    background(move || ai::models(&storage, provider, base_url.as_deref())).await
+}
+
+#[tauri::command]
+fn api_keys(app: AppHandle) -> Result<Vec<Provider>> {
+    ai::saved_keys(&app.state::<Session>().storage)
+}
+
+#[tauri::command]
+fn save_api_key(app: AppHandle, provider: Provider, key: String) -> Result<()> {
+    ai::save_key(&app.state::<Session>().storage, provider, &key)
+}
+
+#[tauri::command]
+fn clear_api_key(app: AppHandle, provider: Provider) -> Result<()> {
+    ai::clear_key(&app.state::<Session>().storage, provider)
+}
+
+#[tauri::command]
 fn settings(app: AppHandle) -> Settings {
     Settings::load(&app.state::<Session>().storage)
 }
@@ -161,6 +204,8 @@ fn catalog() -> Catalog {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .setup(|app| {
             let storage = Storage::new(app.path().app_data_dir()?, app.config().identifier.clone());
             app.manage(Session {
@@ -184,6 +229,13 @@ pub fn run() {
             remove_rule,
             cleanup_items,
             clean,
+            subscriptions,
+            unsubscribe,
+            trash_sender,
+            list_models,
+            api_keys,
+            save_api_key,
+            clear_api_key,
             settings,
             save_settings,
             protect,

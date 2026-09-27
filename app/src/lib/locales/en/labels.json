@@ -3,7 +3,7 @@
   "range": "{{from, number}}–{{to, number}} of {{total, number}}",
   "none": {
     "title": "You have no labels yet",
-    "text": "Organize your inbox and Claude creates them for you.",
+    "text": "Organize your inbox and the AI creates them for you.",
     "action": "Organize now"
   },
   "noMatch": {

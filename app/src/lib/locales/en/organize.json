@@ -1,8 +1,8 @@
 {
   "title": "Organize",
-  "subtitle": "Claude suggests, you decide and Gmail does the rest.",
-  "readCount_one": "Claude read {{count, number}} message",
-  "readCount_other": "Claude read {{count, number}} messages",
+  "subtitle": "The AI suggests, you decide and Gmail does the rest.",
+  "readCount_one": "{{count, number}} message read",
+  "readCount_other": "{{count, number}} messages read",
   "reanalyze": "Analyze again",
   "apply_one": "Apply {{count, number}} sender",
   "apply_other": "Apply {{count, number}} senders",
@@ -10,14 +10,14 @@
     "recommended": "Recommended",
     "new": {
       "title": "Organize new mail",
-      "text": "What arrived without a label. Claude finds the most precise label for each sender."
+      "text": "What arrived without a label. The AI finds the most precise label for each sender."
     },
     "all": {
       "title": "Reorganize everything",
       "text": "Includes what already has a label: moves each sender out of generic buckets into a label of its own."
     }
   },
-  "privacy": "Claude only sees the name, sender and subject, never the content. Nothing changes until you accept.",
+  "privacy": "The AI only sees the name, sender and subject, never the content, and with Ollama nothing leaves this computer. Nothing changes until you accept.",
   "reading": {
     "title": "Reading your inbox",
     "hint": "It can take a couple of minutes if you have a lot of mail."
@@ -36,8 +36,8 @@
     "title": "Nothing to move",
     "text": "Everything that reaches you often already has its label."
   },
-  "intro_one": "Claude suggests {{count, number}} label. Remove what you don't want (✕), rename it if you like and choose what happens to new mail.",
-  "intro_other": "Claude suggests {{count, number}} labels. Remove what you don't want (✕), rename them if you like and choose what happens to new mail.",
+  "intro_one": "The AI suggests {{count, number}} label. Remove what you don't want (✕), rename it if you like and choose what happens to new mail.",
+  "intro_other": "The AI suggests {{count, number}} labels. Remove what you don't want (✕), rename them if you like and choose what happens to new mail.",
   "moving_one": "{{count, number}} sender moves to another label",
   "moving_other": "{{count, number}} senders move to another label",
   "trashing_one": "{{count, number}} label trashes new mail",

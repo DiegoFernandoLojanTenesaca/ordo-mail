@@ -1,0 +1,45 @@
+{
+  "title": "Subscriptions",
+  "subtitle": "Newsletters and mailing lists that write to you. Leave the ones you never read.",
+  "scan": "Find subscriptions",
+  "scanAgain": "Search again",
+  "intro": {
+    "title": "Find what you never read",
+    "text": "Ordo reads your latest {{count, number}} messages (only senders and headers) and lists the senders you can unsubscribe from."
+  },
+  "none": {
+    "title": "No subscriptions found",
+    "text": "Nothing in your latest messages offers a way to unsubscribe."
+  },
+  "tabs": {
+    "all": "All",
+    "neverOpened": "Never opened"
+  },
+  "neverOpened": "Never opened",
+  "unsubscribe": "Unsubscribe",
+  "methods": {
+    "oneClick": "Unsubscribes right here in one click",
+    "link": "Opens their unsubscribe page in your browser",
+    "mail": "Opens an unsubscribe email in your mail app"
+  },
+  "status": {
+    "oneClick": "Unsubscribed",
+    "link": "Page opened",
+    "mail": "Email opened"
+  },
+  "left": {
+    "oneClick": "You unsubscribed from {{name}}",
+    "link": "{{name}}: finish on the page that just opened",
+    "mail": "{{name}}: send the email that just opened"
+  },
+  "trash": "Trash all",
+  "trashConfirm": "Trash all? Click again",
+  "trashed_one": "{{count, number}} message from {{name}} moved to the trash",
+  "trashed_other": "{{count, number}} messages from {{name}} moved to the trash",
+  "block": "Block",
+  "blockConfirm": "Block? Click again",
+  "blockedLabel": "Blocked",
+  "blocked": "New mail from {{name}} now goes straight to the trash",
+  "noMatch": "Nothing matches the search.",
+  "note": "Unsubscribing uses the link each sender includes: one click ones finish here, the rest open their page or an email. Block adds a Gmail filter that sends new mail to the trash, under the “Blocked” label."
+}

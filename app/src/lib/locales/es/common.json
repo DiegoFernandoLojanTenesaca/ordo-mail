@@ -4,13 +4,14 @@
     "home": "Inicio",
     "organize": "Organizar",
     "labels": "Etiquetas",
+    "subscriptions": "Suscripciones",
     "cleanup": "Limpiar",
     "settings": "Ajustes"
   },
   "organizeNow": "Organizar ahora",
   "labelsSection": "Etiquetas",
-  "createLabels": "Crear etiquetas con Claude",
-  "footer": "v{{version}} · con Claude",
+  "createLabels": "Crear etiquetas con IA",
+  "footer": "v{{version}}",
   "menu": "Menú principal",
   "search": {
     "placeholder": "Buscar etiquetas y remitentes",
@@ -24,6 +25,10 @@
   "theme": {
     "toLight": "Usar modo claro",
     "toDark": "Usar modo oscuro"
+  },
+  "update": {
+    "install": "Actualizar a {{version}}",
+    "installing": "Actualizando {{percent}} %"
   },
   "actions": {
     "label": "Etiquetar",

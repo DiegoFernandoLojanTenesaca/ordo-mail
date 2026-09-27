@@ -10,13 +10,14 @@
   import Toasts from '$lib/components/Toasts.svelte';
   import TopBar from '$lib/components/TopBar.svelte';
   import Welcome from '$lib/components/Welcome.svelte';
-  import { app, loadLabels, loadSettings, loadStatus } from '$lib/store.svelte';
+  import { app, checkForUpdate, loadLabels, loadSettings, loadStatus } from '$lib/store.svelte';
 
   let { children }: { children: Snippet } = $props();
 
   onMount(async () => {
     await loadSettings();
     await loadStatus();
+    checkForUpdate();
   });
 
   $effect(() => {

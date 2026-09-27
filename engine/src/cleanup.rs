@@ -1,9 +1,9 @@
 use crate::config::SPECIAL_FOLDERS;
-use crate::error::Result;
+use crate::error::{Error, ErrorCode, Result};
 use crate::gmail::{Gmail, parallel};
 use crate::model::{CleanupItem, Phase, Progress, Report};
 use crate::settings::Settings;
-use crate::text::label_query;
+use crate::text::{label_query, valid_sender};
 
 struct Source {
     id: String,
@@ -82,6 +82,22 @@ pub fn clean(gmail: &Gmail, settings: &Settings, ids: &[String], days: u32, repo
     }
     report(Progress::new(Phase::Done, chosen.len(), chosen.len()));
     Ok(total)
+}
+
+pub fn trash_sender(gmail: &Gmail, settings: &Settings, email: &str) -> Result<usize> {
+    if !valid_sender(email) {
+        return Err(Error::with(ErrorCode::InvalidSender, email));
+    }
+    let source = Source {
+        id: email.to_string(),
+        name: email.to_string(),
+        query: format!("from:{email}"),
+        protected: false,
+        special: false,
+    };
+    let messages = gmail.search(&query(&source, 0, settings), usize::MAX)?;
+    gmail.modify(&messages, &["TRASH"], &[])?;
+    Ok(messages.len())
 }
 
 #[cfg(test)]

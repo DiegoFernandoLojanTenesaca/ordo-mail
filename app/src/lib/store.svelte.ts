@@ -1,10 +1,12 @@
-import { api, onProgress } from './api';
+import type { Update } from '@tauri-apps/plugin-updater';
+import { api, onProgress, updater } from './api';
 import type { Catalog } from './bindings/Catalog';
 import type { Error as EngineError } from './bindings/Error';
 import type { Label } from './bindings/Label';
 import type { Progress } from './bindings/Progress';
 import type { Settings } from './bindings/Settings';
 import type { Status } from './bindings/Status';
+import type { Subscription } from './bindings/Subscription';
 import { TOAST_MS } from './config';
 import { resolveLocale, useLocale } from './i18n.svelte';
 
@@ -15,11 +17,14 @@ export const app = $state({
   settings: null as Settings | null,
   catalog: null as Catalog | null,
   labels: undefined as Label[] | undefined,
+  subscriptions: undefined as Subscription[] | undefined,
   query: '',
   collapsed: false,
   dark: false,
   progress: null as Progress | null,
   toasts: [] as Toast[],
+  update: null as string | null,
+  updating: null as number | null,
 });
 
 onProgress((p) => (app.progress = p));
@@ -83,6 +88,36 @@ export async function updateAppearance(patch: Pick<Partial<Settings>, 'theme' | 
   app.settings = next;
   await useLocale(resolveLocale(next.locale));
   applyTheme();
+}
+
+let pending: Update | null = null;
+
+export async function checkForUpdate(manual = false) {
+  const update = manual ? await attempt(updater.check) : await updater.check().catch(() => null);
+  if (update === undefined) return;
+  pending = update;
+  app.update = update?.version ?? null;
+  if (manual) notify(update ? 'settings:update.available' : 'settings:update.latest', { version: app.update });
+}
+
+export async function installUpdate() {
+  if (!pending) return;
+  const update = pending;
+  let total = 0;
+  let received = 0;
+  app.updating = 0;
+  const done = await attempt(async () => {
+    await update.downloadAndInstall((e) => {
+      if (e.event === 'Started') total = e.data.contentLength ?? 0;
+      if (e.event === 'Progress') {
+        received += e.data.chunkLength;
+        app.updating = total ? Math.round((received / total) * 100) : 0;
+      }
+    });
+    return true;
+  });
+  if (done) await updater.relaunch();
+  else app.updating = null;
 }
 
 export function matches(...texts: string[]) {

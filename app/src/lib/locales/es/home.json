@@ -8,8 +8,8 @@
     "spam": "En spam"
   },
   "hero": {
-    "title": "Organiza tu correo con Claude",
-    "text": "Claude mira quién te escribe y propone una etiqueta para cada remitente. Tú revisas y nada cambia hasta que aceptes.",
+    "title": "Organiza tu correo con IA",
+    "text": "La IA mira quién te escribe y propone una etiqueta para cada remitente. Tú revisas y nada cambia hasta que aceptes.",
     "organizeNew": "Organizar lo nuevo",
     "reorganize": "Reorganizar todo",
     "cleanup": "Limpiar"
@@ -17,7 +17,7 @@
   "how": {
     "title": "Cómo funciona",
     "read": {
-      "title": "Claude lee",
+      "title": "La IA lee",
       "text": "Solo nombre, remitente y asunto, nunca el contenido de tus correos."
     },
     "decide": {

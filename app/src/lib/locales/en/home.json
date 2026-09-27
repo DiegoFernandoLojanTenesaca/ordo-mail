@@ -1,0 +1,32 @@
+{
+  "greeting": "Hi, {{name}}",
+  "subtitle": "Here is your inbox today.",
+  "stats": {
+    "unlabeled": "Without a label",
+    "labels": "Labels",
+    "rules": "Active rules",
+    "spam": "In spam"
+  },
+  "hero": {
+    "title": "Organize your inbox with Claude",
+    "text": "Claude looks at who writes to you and suggests a label for each sender. You review it and nothing changes until you accept.",
+    "organizeNew": "Organize new mail",
+    "reorganize": "Reorganize everything",
+    "cleanup": "Clean up"
+  },
+  "how": {
+    "title": "How it works",
+    "read": {
+      "title": "Claude reads",
+      "text": "Only the name, sender and subject, never the content of your messages."
+    },
+    "decide": {
+      "title": "You decide",
+      "text": "Remove senders, rename labels and choose what happens to new mail."
+    },
+    "auto": {
+      "title": "Gmail does the rest",
+      "text": "The filters sort your mail all day, even with this computer off."
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "title": "Organize",
+  "subtitle": "Claude suggests, you decide and Gmail does the rest.",
+  "readCount_one": "Claude read {{count, number}} message",
+  "readCount_other": "Claude read {{count, number}} messages",
+  "reanalyze": "Analyze again",
+  "apply_one": "Apply {{count, number}} sender",
+  "apply_other": "Apply {{count, number}} senders",
+  "modes": {
+    "recommended": "Recommended",
+    "new": {
+      "title": "Organize new mail",
+      "text": "What arrived without a label. Claude finds the most precise label for each sender."
+    },
+    "all": {
+      "title": "Reorganize everything",
+      "text": "Includes what already has a label: moves each sender out of generic buckets into a label of its own."
+    }
+  },
+  "privacy": "Claude only sees the name, sender and subject, never the content. Nothing changes until you accept.",
+  "reading": {
+    "title": "Reading your inbox",
+    "hint": "It can take a couple of minutes if you have a lot of mail."
+  },
+  "applying": {
+    "title": "Applying in Gmail",
+    "hint": "Keep the app open until it finishes."
+  },
+  "done": {
+    "title": "Everything in its place",
+    "text": "The filters are in Gmail now: new mail arrives organized even with this computer off.",
+    "viewLabels": "See my labels",
+    "again": "Organize again"
+  },
+  "nothing": {
+    "title": "Nothing to move",
+    "text": "Everything that reaches you often already has its label."
+  },
+  "intro_one": "Claude suggests {{count, number}} label. Remove what you don't want (✕), rename it if you like and choose what happens to new mail.",
+  "intro_other": "Claude suggests {{count, number}} labels. Remove what you don't want (✕), rename them if you like and choose what happens to new mail.",
+  "moving_one": "{{count, number}} sender moves to another label",
+  "moving_other": "{{count, number}} senders move to another label",
+  "trashing_one": "{{count, number}} label trashes new mail",
+  "trashing_other": "{{count, number}} labels trash new mail",
+  "failed_one": "({{count, number}} message could not be read)",
+  "failed_other": "({{count, number}} messages could not be read)",
+  "badgeNew": "New",
+  "badgeExisting": "Existing",
+  "discard": "Discard this label",
+  "leaves": "{{count, number}} · leaves {{label}}",
+  "oldMail": "Old messages get labeled or archived. To send them to the trash use Clean up or “Empty” in Labels.",
+  "applied_one": "Done: {{count, number}} sender organized",
+  "applied_other": "Done: {{count, number}} senders organized",
+  "labelName": "Label name"
+}

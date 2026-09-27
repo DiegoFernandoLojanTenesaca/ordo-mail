@@ -1,0 +1,50 @@
+{
+  "tagline": "Your inbox, in order",
+  "nav": {
+    "home": "Home",
+    "organize": "Organize",
+    "labels": "Labels",
+    "cleanup": "Clean up",
+    "settings": "Settings"
+  },
+  "organizeNow": "Organize now",
+  "labelsSection": "Labels",
+  "createLabels": "Create labels with Claude",
+  "footer": "v{{version}} · with Claude",
+  "menu": "Main menu",
+  "search": {
+    "placeholder": "Search labels and senders",
+    "clear": "Clear search"
+  },
+  "window": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
+  },
+  "theme": {
+    "toLight": "Use light mode",
+    "toDark": "Use dark mode"
+  },
+  "actions": {
+    "label": "Label",
+    "archive": "Archive",
+    "trash": "Trash"
+  },
+  "actionHelp": {
+    "label": "Arrives in the inbox with its label",
+    "archive": "Gets its label and skips the inbox",
+    "trash": "Goes straight to the trash"
+  },
+  "removeItem": "Remove {{item}}",
+  "confirmAgain": "Sure? Click again",
+  "cancel": "Cancel",
+  "refresh": "Refresh",
+  "units": {
+    "senders_one": "{{count, number}} sender",
+    "senders_other": "{{count, number}} senders",
+    "labels_one": "{{count, number}} label",
+    "labels_other": "{{count, number}} labels",
+    "messages_one": "{{count, number}} message",
+    "messages_other": "{{count, number}} messages"
+  }
+}

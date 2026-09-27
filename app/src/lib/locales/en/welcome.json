@@ -1,0 +1,21 @@
+{
+  "title": "Welcome",
+  "needKey": "To organize your Gmail, {{app}} needs a Google key. You only do this once.",
+  "steps": {
+    "project": "In Google Cloud create a project and enable the Gmail API.",
+    "consent": "In Google Auth Platform set the app as “External” and add yourself as a test user.",
+    "client": "In Clients create a “Desktop app” client and download its JSON.",
+    "upload": "Load it here. It is kept only on this computer."
+  },
+  "openCloud": "Open Google Cloud",
+  "loadFile": "Load credentials.json",
+  "saved": "credentials.json saved",
+  "connectTitle": "Connect your account",
+  "connectText": "Your browser opens: pick your account. If you see “Google hasn't verified this app”, press Continue (the app is you) and accept the permissions.",
+  "connect": "Connect with Google",
+  "waiting": "Waiting for the browser…",
+  "page": {
+    "title": "{{app}} is connected",
+    "message": "You can close this tab and go back to {{app}}."
+  }
+}

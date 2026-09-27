@@ -1,0 +1,53 @@
+{
+  "title": "Ajustes",
+  "account": {
+    "title": "Cuenta",
+    "connected": "Conectada con Google",
+    "signOut": "Cerrar sesión",
+    "signOutConfirm": "¿Cerrar sesión? Clic otra vez",
+    "permissions": "Permisos en Google"
+  },
+  "appearance": {
+    "title": "Apariencia",
+    "help": "Claro, oscuro o igual que tu sistema."
+  },
+  "themes": {
+    "system": "Sistema",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "language": {
+    "title": "Idioma",
+    "help": "De la app y de los nombres de las etiquetas nuevas.",
+    "system": "Sistema ({{name}})"
+  },
+  "model": {
+    "title": "Modelo de Claude",
+    "help": "Claude se usa con tu suscripción de Claude Code."
+  },
+  "models": {
+    "sonnet": "Sonnet · equilibrado",
+    "haiku": "Haiku · más rápido",
+    "opus": "Opus · el más listo"
+  },
+  "limit": {
+    "title": "Correos a revisar",
+    "help": "Cuántos correos lee Claude cada vez que organizas. Más correos, más remitentes y más tiempo."
+  },
+  "cleanup": {
+    "title": "Limpiar",
+    "help": "Antigüedad que viene elegida en la pantalla Limpiar."
+  },
+  "protected": {
+    "title": "Etiquetas protegidas",
+    "help": "La limpieza nunca las toca. Se protegen con el candado en Etiquetas.",
+    "none": "Ninguna todavía."
+  },
+  "about": {
+    "title": "Acerca de",
+    "text": "{{app}} v{{version}}. Tus llaves se quedan en esta PC: el permiso de Google en el llavero del sistema y credentials.json en la carpeta de la app."
+  },
+  "save": "Guardar cambios",
+  "saved": "Ajustes guardados",
+  "discard": "Cancelar"
+}

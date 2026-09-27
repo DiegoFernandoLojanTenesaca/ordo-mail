@@ -1,0 +1,55 @@
+{
+  "title": "Organizar",
+  "subtitle": "Claude propone, tú decides y Gmail lo hace solo.",
+  "readCount_one": "Claude leyó {{count, number}} correo",
+  "readCount_other": "Claude leyó {{count, number}} correos",
+  "reanalyze": "Volver a analizar",
+  "apply_one": "Aplicar {{count, number}} remitente",
+  "apply_other": "Aplicar {{count, number}} remitentes",
+  "modes": {
+    "recommended": "Recomendado",
+    "new": {
+      "title": "Organizar lo nuevo",
+      "text": "Lo que llegó sin etiqueta. Claude le busca la etiqueta más precisa a cada remitente."
+    },
+    "all": {
+      "title": "Reorganizar todo",
+      "text": "Incluye lo que ya tiene etiqueta: saca a cada remitente de los cajones generales y lo pasa a su etiqueta propia."
+    }
+  },
+  "privacy": "Claude solo ve nombre, remitente y asunto, nunca el contenido. Nada cambia hasta que aceptes.",
+  "reading": {
+    "title": "Leyendo tu correo",
+    "hint": "Puede tardar un par de minutos si tienes mucho correo."
+  },
+  "applying": {
+    "title": "Aplicando en Gmail",
+    "hint": "No cierres la app hasta que termine."
+  },
+  "done": {
+    "title": "Todo en su lugar",
+    "text": "Los filtros ya están en Gmail: el correo nuevo llega ordenado aunque esta PC esté apagada.",
+    "viewLabels": "Ver mis etiquetas",
+    "again": "Organizar otra vez"
+  },
+  "nothing": {
+    "title": "No hay nada que mover",
+    "text": "Todo lo que te llega seguido ya está en su etiqueta."
+  },
+  "intro_one": "Claude propone {{count, number}} etiqueta. Quita lo que no quieras (✕), cámbiale el nombre si quieres y elige qué pasa con el correo nuevo.",
+  "intro_other": "Claude propone {{count, number}} etiquetas. Quita lo que no quieras (✕), cámbiales el nombre si quieres y elige qué pasa con el correo nuevo.",
+  "moving_one": "{{count, number}} remitente se mueve de etiqueta",
+  "moving_other": "{{count, number}} remitentes se mueven de etiqueta",
+  "trashing_one": "{{count, number}} etiqueta borra el correo nuevo",
+  "trashing_other": "{{count, number}} etiquetas borran el correo nuevo",
+  "failed_one": "({{count, number}} correo no se pudo leer)",
+  "failed_other": "({{count, number}} correos no se pudieron leer)",
+  "badgeNew": "Nueva",
+  "badgeExisting": "Ya existe",
+  "discard": "Descartar esta etiqueta",
+  "leaves": "{{count, number}} · sale de {{label}}",
+  "oldMail": "Los correos viejos se etiquetan o archivan. Para mandarlos a la papelera usa Limpiar o «Vaciar» en Etiquetas.",
+  "applied_one": "Listo: {{count, number}} remitente ordenado",
+  "applied_other": "Listo: {{count, number}} remitentes ordenados",
+  "labelName": "Nombre de la etiqueta"
+}

@@ -1,0 +1,27 @@
+{
+  "title": "Clean up",
+  "subtitle": "Tick what you don't need and send it to the trash.",
+  "age": "Only messages",
+  "ageAll": "of any age",
+  "ageOlder_one": "older than {{count, number}} day",
+  "ageOlder_other": "older than {{count, number}} days",
+  "tabs": {
+    "special": "Gmail folders",
+    "labels": "Your labels"
+  },
+  "folders": {
+    "spam": "Spam",
+    "promotions": "Promotions",
+    "social": "Social"
+  },
+  "selectAll": "Select all",
+  "chosen_one": "{{count, number}} folder chosen · {{messages}} messages",
+  "chosen_other": "{{count, number}} folders chosen · {{messages}} messages",
+  "chooseSomething": "Choose what to clean",
+  "moveToTrash": "Move to trash",
+  "protectedRow": "Protected",
+  "noMatch": "Nothing matches the search.",
+  "note": "Gmail empties the trash after 30 days; until then you can recover your messages. Protected labels are never touched: change that in Labels.",
+  "done_one": "{{count, number}} message moved to the trash. You can recover it for 30 days.",
+  "done_other": "{{count, number}} messages moved to the trash. You can recover them for 30 days."
+}

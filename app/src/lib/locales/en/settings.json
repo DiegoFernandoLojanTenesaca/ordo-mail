@@ -1,0 +1,53 @@
+{
+  "title": "Settings",
+  "account": {
+    "title": "Account",
+    "connected": "Connected with Google",
+    "signOut": "Sign out",
+    "signOutConfirm": "Sign out? Click again",
+    "permissions": "Google permissions"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "help": "Light, dark or the same as your system."
+  },
+  "themes": {
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "title": "Language",
+    "help": "For the app and for the names of new labels.",
+    "system": "System ({{name}})"
+  },
+  "model": {
+    "title": "Claude model",
+    "help": "Claude runs with your Claude Code subscription."
+  },
+  "models": {
+    "sonnet": "Sonnet · balanced",
+    "haiku": "Haiku · fastest",
+    "opus": "Opus · smartest"
+  },
+  "limit": {
+    "title": "Messages to review",
+    "help": "How many messages Claude reads each time you organize. More messages means more senders and more time."
+  },
+  "cleanup": {
+    "title": "Clean up",
+    "help": "Age already chosen on the Clean up screen."
+  },
+  "protected": {
+    "title": "Protected labels",
+    "help": "Clean up never touches them. Protect them with the lock in Labels.",
+    "none": "None yet."
+  },
+  "about": {
+    "title": "About",
+    "text": "{{app}} v{{version}}. Your keys stay on this computer: the Google permission in the system keychain and credentials.json in the app folder."
+  },
+  "save": "Save changes",
+  "saved": "Settings saved",
+  "discard": "Cancel"
+}

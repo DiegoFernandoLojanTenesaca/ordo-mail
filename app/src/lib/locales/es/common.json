@@ -1,0 +1,50 @@
+{
+  "tagline": "Tu correo, en orden",
+  "nav": {
+    "home": "Inicio",
+    "organize": "Organizar",
+    "labels": "Etiquetas",
+    "cleanup": "Limpiar",
+    "settings": "Ajustes"
+  },
+  "organizeNow": "Organizar ahora",
+  "labelsSection": "Etiquetas",
+  "createLabels": "Crear etiquetas con Claude",
+  "footer": "v{{version}} · con Claude",
+  "menu": "Menú principal",
+  "search": {
+    "placeholder": "Buscar etiquetas y remitentes",
+    "clear": "Borrar búsqueda"
+  },
+  "window": {
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "close": "Cerrar"
+  },
+  "theme": {
+    "toLight": "Usar modo claro",
+    "toDark": "Usar modo oscuro"
+  },
+  "actions": {
+    "label": "Etiquetar",
+    "archive": "Archivar",
+    "trash": "Borrar"
+  },
+  "actionHelp": {
+    "label": "Llega a Recibidos con su etiqueta",
+    "archive": "Se etiqueta y no pasa por Recibidos",
+    "trash": "Va directo a la papelera"
+  },
+  "removeItem": "Quitar {{item}}",
+  "confirmAgain": "¿Seguro? Clic otra vez",
+  "cancel": "Cancelar",
+  "refresh": "Actualizar",
+  "units": {
+    "senders_one": "{{count, number}} remitente",
+    "senders_other": "{{count, number}} remitentes",
+    "labels_one": "{{count, number}} etiqueta",
+    "labels_other": "{{count, number}} etiquetas",
+    "messages_one": "{{count, number}} correo",
+    "messages_other": "{{count, number}} correos"
+  }
+}

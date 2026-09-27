@@ -1,0 +1,9 @@
+- Added organizing new mail with Claude, one precise label per sender
+- Added reorganizing everything, moving senders out of generic labels with their filters and old messages
+- Added labels view with counts, senders, quick actions, rename, add sender, protect, empty and delete
+- Added clean up of spam, promotions, social and labels by age, always to the trash
+- Added Gmail style interface with search, label sidebar, light and dark mode
+- Added English and Spanish, with new label names in the chosen language
+- Added storage of the Google permission in the system keychain
+- Added TypeScript types generated from the Rust engine
+- Added live checks against Claude and a read only pass over the real mailbox

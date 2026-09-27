@@ -1,0 +1,8 @@
+/target
+*.exe
+
+credentials.json
+client_secret_*.json
+token.json
+.env
+.env.*

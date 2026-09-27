@@ -1,0 +1,27 @@
+{
+  "title": "Limpiar",
+  "subtitle": "Marca lo que no necesitas y mándalo a la papelera.",
+  "age": "Solo los correos",
+  "ageAll": "de cualquier fecha",
+  "ageOlder_one": "de más de {{count, number}} día",
+  "ageOlder_other": "de más de {{count, number}} días",
+  "tabs": {
+    "special": "Carpetas de Gmail",
+    "labels": "Tus etiquetas"
+  },
+  "folders": {
+    "spam": "Spam",
+    "promotions": "Promociones",
+    "social": "Redes sociales"
+  },
+  "selectAll": "Elegir todas",
+  "chosen_one": "{{count, number}} carpeta elegida · {{messages}} correos",
+  "chosen_other": "{{count, number}} carpetas elegidas · {{messages}} correos",
+  "chooseSomething": "Elige qué limpiar",
+  "moveToTrash": "Mover a la papelera",
+  "protectedRow": "Protegida",
+  "noMatch": "Nada coincide con la búsqueda.",
+  "note": "Gmail vacía la papelera a los 30 días; hasta entonces puedes recuperar tus correos. Las etiquetas protegidas nunca se tocan: cámbialo en Etiquetas.",
+  "done_one": "{{count, number}} correo a la papelera. Puedes recuperarlo durante 30 días.",
+  "done_other": "{{count, number}} correos a la papelera. Puedes recuperarlos durante 30 días."
+}

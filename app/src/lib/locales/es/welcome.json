@@ -1,0 +1,21 @@
+{
+  "title": "Te damos la bienvenida",
+  "needKey": "Para ordenar tu Gmail, {{app}} necesita una llave de Google. Se hace una sola vez.",
+  "steps": {
+    "project": "En Google Cloud crea un proyecto y habilita la Gmail API.",
+    "consent": "En Google Auth Platform configura la app como «Externo» y agrégate como usuario de prueba.",
+    "client": "En Clientes crea uno de tipo «App de escritorio» y descarga su JSON.",
+    "upload": "Cárgalo aquí. Queda guardado solo en esta PC."
+  },
+  "openCloud": "Abrir Google Cloud",
+  "loadFile": "Cargar credentials.json",
+  "saved": "credentials.json guardado",
+  "connectTitle": "Conecta tu cuenta",
+  "connectText": "Se abre el navegador: elige tu cuenta. Si aparece «Google no verificó esta app», pulsa Continuar (la app eres tú) y acepta los permisos.",
+  "connect": "Conectar con Google",
+  "waiting": "Esperando al navegador…",
+  "page": {
+    "title": "{{app}} está conectado",
+    "message": "Ya puedes cerrar esta pestaña y volver a {{app}}."
+  }
+}

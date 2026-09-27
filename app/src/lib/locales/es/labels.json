@@ -1,0 +1,42 @@
+{
+  "title": "Etiquetas",
+  "range": "{{from, number}}–{{to, number}} de {{total, number}}",
+  "none": {
+    "title": "Aún no tienes etiquetas",
+    "text": "Organiza tu correo y Claude las crea por ti.",
+    "action": "Organizar ahora"
+  },
+  "noMatch": {
+    "title": "Nada coincide con «{{query}}»",
+    "text": "Prueba con otra palabra o borra la búsqueda.",
+    "action": "Borrar búsqueda"
+  },
+  "noRules": "Sin reglas: esta etiqueta la pones tú a mano",
+  "protectedHint": "Protegida: la limpieza no la toca",
+  "newMail": "Correo nuevo de estos remitentes:",
+  "protect": "Proteger",
+  "protected": "Protegida",
+  "unprotect": "Quitar protección",
+  "emptyLabel": "Vaciar",
+  "emptyHint": "Vaciar (sus correos a la papelera)",
+  "emptyConfirm": "¿Vaciar? Clic otra vez",
+  "delete": "Eliminar",
+  "deleteHint": "Eliminar la etiqueta (tus correos se quedan)",
+  "deleteConfirm": "¿Eliminar? Clic otra vez",
+  "rename": "Renombrar",
+  "save": "Guardar",
+  "removeHint": "Quita un remitente (✕) para que deje de llegar aquí; sus correos viejos se quedan.",
+  "addSender": "Agregar remitente",
+  "addSenderPlaceholder": "nombre@empresa.com o empresa.com",
+  "toasts": {
+    "actionChanged": "«{{name}}»: el correo nuevo ahora → {{action}}",
+    "protectedOn": "«{{name}}» protegida: la limpieza no la toca",
+    "protectedOff": "«{{name}}» ya no está protegida",
+    "emptied_one": "{{count, number}} correo de «{{name}}» a la papelera",
+    "emptied_other": "{{count, number}} correos de «{{name}}» a la papelera",
+    "deleted": "Etiqueta «{{name}}» eliminada. Tus correos siguen ahí.",
+    "ruleRemoved": "{{sender}} ya no llega a «{{name}}»",
+    "renamed": "Etiqueta renombrada a «{{name}}»",
+    "senderAdded": "{{sender}} ahora llega a «{{name}}»"
+  }
+}

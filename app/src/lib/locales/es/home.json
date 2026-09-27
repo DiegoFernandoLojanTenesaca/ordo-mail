@@ -1,0 +1,32 @@
+{
+  "greeting": "Hola, {{name}}",
+  "subtitle": "Así está tu correo hoy.",
+  "stats": {
+    "unlabeled": "Sin etiqueta",
+    "labels": "Etiquetas",
+    "rules": "Reglas activas",
+    "spam": "En spam"
+  },
+  "hero": {
+    "title": "Organiza tu correo con Claude",
+    "text": "Claude mira quién te escribe y propone una etiqueta para cada remitente. Tú revisas y nada cambia hasta que aceptes.",
+    "organizeNew": "Organizar lo nuevo",
+    "reorganize": "Reorganizar todo",
+    "cleanup": "Limpiar"
+  },
+  "how": {
+    "title": "Cómo funciona",
+    "read": {
+      "title": "Claude lee",
+      "text": "Solo nombre, remitente y asunto, nunca el contenido de tus correos."
+    },
+    "decide": {
+      "title": "Tú decides",
+      "text": "Quitas remitentes, renombras etiquetas y eliges qué pasa con el correo nuevo."
+    },
+    "auto": {
+      "title": "Gmail trabaja solo",
+      "text": "Los filtros ordenan todo el día, aunque la PC esté apagada."
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "title": "Labels",
+  "range": "{{from, number}}–{{to, number}} of {{total, number}}",
+  "none": {
+    "title": "You have no labels yet",
+    "text": "Organize your inbox and Claude creates them for you.",
+    "action": "Organize now"
+  },
+  "noMatch": {
+    "title": "Nothing matches “{{query}}”",
+    "text": "Try another word or clear the search.",
+    "action": "Clear search"
+  },
+  "noRules": "No rules: you add this label by hand",
+  "protectedHint": "Protected: clean up never touches it",
+  "newMail": "New mail from these senders:",
+  "protect": "Protect",
+  "protected": "Protected",
+  "unprotect": "Remove protection",
+  "emptyLabel": "Empty",
+  "emptyHint": "Empty (move its mail to the trash)",
+  "emptyConfirm": "Empty? Click again",
+  "delete": "Delete",
+  "deleteHint": "Delete the label (your messages stay)",
+  "deleteConfirm": "Delete? Click again",
+  "rename": "Rename",
+  "save": "Save",
+  "removeHint": "Remove a sender (✕) so it stops arriving here; its old messages stay.",
+  "addSender": "Add sender",
+  "addSenderPlaceholder": "name@company.com or company.com",
+  "toasts": {
+    "actionChanged": "“{{name}}”: new mail now → {{action}}",
+    "protectedOn": "“{{name}}” is protected: clean up never touches it",
+    "protectedOff": "“{{name}}” is no longer protected",
+    "emptied_one": "{{count, number}} message from “{{name}}” moved to the trash",
+    "emptied_other": "{{count, number}} messages from “{{name}}” moved to the trash",
+    "deleted": "Label “{{name}}” deleted. Your messages are still there.",
+    "ruleRemoved": "{{sender}} no longer goes to “{{name}}”",
+    "renamed": "Label renamed to “{{name}}”",
+    "senderAdded": "{{sender}} now goes to “{{name}}”"
+  }
+}

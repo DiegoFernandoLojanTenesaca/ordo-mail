@@ -1,0 +1,11 @@
+{
+  "preparing": "Preparando…",
+  "searching": "Buscando correos",
+  "reading": "Leyendo correos",
+  "thinking_one": "Claude está eligiendo la etiqueta de {{count, number}} remitente",
+  "thinking_other": "Claude está eligiendo las etiquetas de {{count, number}} remitentes",
+  "applying": "{{detail}}",
+  "cleaning": "Limpiando {{detail}}",
+  "done": "Listo",
+  "of": "{{done, number}} de {{total, number}}"
+}

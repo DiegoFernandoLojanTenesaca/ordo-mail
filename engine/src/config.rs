@@ -28,8 +28,18 @@ pub const LABEL_LENGTH: usize = 40;
 pub const LOCALE_LENGTH: usize = 16;
 
 pub const PUBLIC_DOMAINS: &[&str] = &[
-    "gmail.com", "googlemail.com", "hotmail.com", "hotmail.es", "outlook.com", "outlook.es",
-    "live.com", "yahoo.com", "yahoo.es", "icloud.com", "protonmail.com", "proton.me",
+    "gmail.com",
+    "googlemail.com",
+    "hotmail.com",
+    "hotmail.es",
+    "outlook.com",
+    "outlook.es",
+    "live.com",
+    "yahoo.com",
+    "yahoo.es",
+    "icloud.com",
+    "protonmail.com",
+    "proton.me",
 ];
 
 pub const SPECIAL_FOLDERS: &[(&str, &str)] = &[

@@ -21,7 +21,9 @@ impl Session {
 }
 
 async fn background<T: Send + 'static>(f: impl FnOnce() -> Result<T> + Send + 'static) -> Result<T> {
-    tauri::async_runtime::spawn_blocking(f).await.map_err(|e| Error::with(ErrorCode::Io, e))?
+    tauri::async_runtime::spawn_blocking(f)
+        .await
+        .map_err(|e| Error::with(ErrorCode::Io, e))?
 }
 
 async fn with_gmail<T: Send + 'static>(
@@ -32,7 +34,12 @@ async fn with_gmail<T: Send + 'static>(
     let gmail = session.gmail.read().unwrap().clone().ok_or(ErrorCode::NoSession)?;
     let settings = Settings::load(&session.storage);
     let app = app.clone();
-    background(move || f(&gmail, &settings, &|p| { let _ = app.emit("progress", p); })).await
+    background(move || {
+        f(&gmail, &settings, &|p| {
+            let _ = app.emit("progress", p);
+        })
+    })
+    .await
 }
 
 #[tauri::command]
@@ -156,12 +163,31 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             let storage = Storage::new(app.path().app_data_dir()?, app.config().identifier.clone());
-            app.manage(Session { storage, gmail: RwLock::new(None) });
+            app.manage(Session {
+                storage,
+                gmail: RwLock::new(None),
+            });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            status, save_credentials, connect, disconnect, summary, analyze, apply, labels, change_action,
-            rename_label, delete_label, remove_rule, cleanup_items, clean, settings, save_settings, protect, catalog
+            status,
+            save_credentials,
+            connect,
+            disconnect,
+            summary,
+            analyze,
+            apply,
+            labels,
+            change_action,
+            rename_label,
+            delete_label,
+            remove_rule,
+            cleanup_items,
+            clean,
+            settings,
+            save_settings,
+            protect,
+            catalog
         ])
         .run(tauri::generate_context!())
         .expect("failed to start Ordo");

@@ -15,7 +15,10 @@ pub struct Storage {
 
 impl Storage {
     pub fn new(dir: impl Into<PathBuf>, service: impl Into<String>) -> Self {
-        Self { dir: dir.into(), service: service.into() }
+        Self {
+            dir: dir.into(),
+            service: service.into(),
+        }
     }
 
     pub fn credentials(&self) -> PathBuf {
@@ -102,7 +105,11 @@ pub struct Catalog {
 
 impl Catalog {
     pub fn get() -> Self {
-        Self { models: ClaudeModel::ALL.to_vec(), themes: Theme::ALL.to_vec(), label_max_length: LABEL_LENGTH }
+        Self {
+            models: ClaudeModel::ALL.to_vec(),
+            themes: Theme::ALL.to_vec(),
+            label_max_length: LABEL_LENGTH,
+        }
     }
 }
 
@@ -120,13 +127,23 @@ pub struct Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        Self { model: ClaudeModel::default(), limit: 2000, cleanup_days: 30, protected: Vec::new(), theme: Theme::default(), locale: None }
+        Self {
+            model: ClaudeModel::default(),
+            limit: 2000,
+            cleanup_days: 30,
+            protected: Vec::new(),
+            theme: Theme::default(),
+            locale: None,
+        }
     }
 }
 
 impl Settings {
     pub fn load(storage: &Storage) -> Self {
-        fs::read_to_string(storage.settings()).ok().and_then(|t| serde_json::from_str(&t).ok()).unwrap_or_default()
+        fs::read_to_string(storage.settings())
+            .ok()
+            .and_then(|t| serde_json::from_str(&t).ok())
+            .unwrap_or_default()
     }
 
     pub fn save(&self, storage: &Storage) -> Result<()> {

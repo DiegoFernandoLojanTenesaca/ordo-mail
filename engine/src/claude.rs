@@ -42,7 +42,14 @@ pub(crate) fn classify(model: ClaudeModel, locale: &str, samples: &[Sample], exi
     );
     for s in samples {
         let subjects: Vec<String> = s.subjects.iter().map(|t| t.chars().take(SUBJECT_LENGTH).collect()).collect();
-        prompt += &format!("{} | {} <{}> | {} | {}\n", s.count, s.name, s.email, s.current.unwrap_or("-"), subjects.join(" ; "));
+        prompt += &format!(
+            "{} | {} <{}> | {} | {}\n",
+            s.count,
+            s.name,
+            s.email,
+            s.current.unwrap_or("-"),
+            subjects.join(" ; ")
+        );
     }
     let answer = ask(model, &prompt)?;
 
@@ -54,7 +61,11 @@ pub(crate) fn classify(model: ClaudeModel, locale: &str, samples: &[Sample], exi
         if label.is_empty() || label.chars().count() > LABEL_LENGTH || label.contains(['=', '#', '"', '\n']) {
             continue;
         }
-        let label = existing.iter().find(|e| e.eq_ignore_ascii_case(label)).cloned().unwrap_or_else(|| label.to_string());
+        let label = existing
+            .iter()
+            .find(|e| e.eq_ignore_ascii_case(label))
+            .cloned()
+            .unwrap_or_else(|| label.to_string());
         for sender in rule["senders"].as_array().into_iter().flatten().filter_map(Value::as_str) {
             let sender = sender.trim().to_lowercase();
             if acceptable(&sender, &known) && seen.insert(sender.clone()) {
@@ -74,8 +85,21 @@ fn acceptable(sender: &str, known: &HashSet<&str>) -> bool {
 fn ask(model: ClaudeModel, prompt: &str) -> Result<Value> {
     let mut command = Command::new("claude");
     command
-        .args(["-p", "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence",
-               "--model", model.cli_name(), "--output-format", "json", "--json-schema", SCHEMA])
+        .args([
+            "-p",
+            "--tools",
+            "",
+            "--strict-mcp-config",
+            "--setting-sources",
+            "",
+            "--no-session-persistence",
+            "--model",
+            model.cli_name(),
+            "--output-format",
+            "json",
+            "--json-schema",
+            SCHEMA,
+        ])
         .current_dir(std::env::temp_dir())
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
@@ -114,8 +138,20 @@ mod tests {
     #[ignore]
     fn claude_answers_live() {
         let samples = [
-            Sample { email: "statements@bank.example", name: "Example Bank", count: 5, subjects: vec!["Your statement"], current: None },
-            Sample { email: "ana.ruiz@acme.com", name: "Ana Ruiz", count: 9, subjects: vec!["Project update"], current: None },
+            Sample {
+                email: "statements@bank.example",
+                name: "Example Bank",
+                count: 5,
+                subjects: vec!["Your statement"],
+                current: None,
+            },
+            Sample {
+                email: "ana.ruiz@acme.com",
+                name: "Ana Ruiz",
+                count: 9,
+                subjects: vec!["Project update"],
+                current: None,
+            },
         ];
         let rules = classify(ClaudeModel::Haiku, "es", &samples, &[]).unwrap();
         assert!(!rules.is_empty());

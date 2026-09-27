@@ -45,7 +45,10 @@ impl Error {
     }
 
     pub fn with(code: ErrorCode, detail: impl fmt::Display) -> Self {
-        Self { code, detail: Some(detail.to_string()) }
+        Self {
+            code,
+            detail: Some(detail.to_string()),
+        }
     }
 }
 

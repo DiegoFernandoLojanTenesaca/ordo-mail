@@ -5,7 +5,8 @@ use engine::{Gmail, Settings, Storage, cleanup, organize, rules};
 const SERVICE: &str = "com.lojan.ordo";
 
 fn storage() -> Storage {
-    let dir = std::env::var("ORDO_DATA_DIR").map(PathBuf::from)
+    let dir = std::env::var("ORDO_DATA_DIR")
+        .map(PathBuf::from)
         .unwrap_or_else(|_| PathBuf::from(std::env::var("APPDATA").expect("APPDATA")).join(SERVICE));
     Storage::new(dir, SERVICE)
 }

@@ -32,3 +32,9 @@
 - `cargo test -p engine -- --ignored` runs Claude live and a read only smoke pass over the real mailbox.
 - Run the devkit scans (hardcoded values, spacing, duplication, format) before committing.
 - Commits: conventional, short, lowercase, no attribution footer.
+
+## Release
+
+- The version lives only in `app/package.json`.
+- Bump it, replace `CHANGELOG.md` with the changes since the last release, commit, then push a tag with the same number (`0.4.0`, no `v`).
+- The tag runs `.github/workflows/release.yml`: checks, builds `ordo-<tag>.exe` and publishes the release with the changelog. Nothing runs on plain pushes.

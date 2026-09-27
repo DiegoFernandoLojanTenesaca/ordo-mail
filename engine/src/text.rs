@@ -12,7 +12,13 @@ pub fn random(bytes: usize) -> String {
 
 pub fn encode(s: &str) -> String {
     s.bytes()
-        .map(|b| if b.is_ascii_alphanumeric() || b"-_.~".contains(&b) { (b as char).to_string() } else { format!("%{b:02X}") })
+        .map(|b| {
+            if b.is_ascii_alphanumeric() || b"-_.~".contains(&b) {
+                (b as char).to_string()
+            } else {
+                format!("%{b:02X}")
+            }
+        })
         .collect()
 }
 
@@ -21,7 +27,10 @@ pub fn decode(s: &str) -> String {
     let mut out = Vec::new();
     let mut i = 0;
     while i < b.len() {
-        let hex = b.get(i + 1..i + 3).and_then(|h| std::str::from_utf8(h).ok()).and_then(|h| u8::from_str_radix(h, 16).ok());
+        let hex = b
+            .get(i + 1..i + 3)
+            .and_then(|h| std::str::from_utf8(h).ok())
+            .and_then(|h| u8::from_str_radix(h, 16).ok());
         match (b[i], hex) {
             (b'%', Some(x)) => {
                 out.push(x);
@@ -49,11 +58,19 @@ pub fn escape_html(s: &str) -> String {
 }
 
 pub fn email_of(from: &str) -> String {
-    from.rsplit_once('<').map_or(from, |(_, r)| r.split('>').next().unwrap_or_default()).trim().to_lowercase()
+    from.rsplit_once('<')
+        .map_or(from, |(_, r)| r.split('>').next().unwrap_or_default())
+        .trim()
+        .to_lowercase()
 }
 
 pub fn name_of(from: &str) -> String {
-    from.rsplit_once('<').map_or("", |(n, _)| n).trim().trim_matches('"').trim().to_string()
+    from.rsplit_once('<')
+        .map_or("", |(n, _)| n)
+        .trim()
+        .trim_matches('"')
+        .trim()
+        .to_string()
 }
 
 pub fn valid_sender(q: &str) -> bool {

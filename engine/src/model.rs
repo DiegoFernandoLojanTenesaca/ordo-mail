@@ -105,11 +105,21 @@ pub struct Progress {
 
 impl Progress {
     pub fn new(phase: Phase, done: usize, total: usize) -> Self {
-        Self { phase, detail: None, done, total }
+        Self {
+            phase,
+            detail: None,
+            done,
+            total,
+        }
     }
 
     pub fn about(phase: Phase, detail: impl Into<String>, done: usize, total: usize) -> Self {
-        Self { phase, detail: Some(detail.into()), done, total }
+        Self {
+            phase,
+            detail: Some(detail.into()),
+            done,
+            total,
+        }
     }
 }
 

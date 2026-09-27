@@ -31,7 +31,9 @@ fn agent() -> ureq::Agent {
 
 impl Gmail {
     pub fn restore(storage: &Storage) -> Result<Option<Self>> {
-        let Some(refresh_token) = storage.load_token()? else { return Ok(None) };
+        let Some(refresh_token) = storage.load_token()? else {
+            return Ok(None);
+        };
         let (agent, client) = (agent(), Client::load(storage)?);
         match auth::refresh(&agent, &client, &refresh_token) {
             Ok(access) => Self::open(agent, client, refresh_token, access).map(Some),
@@ -48,7 +50,13 @@ impl Gmail {
     }
 
     fn open(agent: ureq::Agent, client: Client, refresh_token: String, access: String) -> Result<Self> {
-        let mut gmail = Self { agent, client, refresh_token, access_token: RwLock::new(access), account: String::new() };
+        let mut gmail = Self {
+            agent,
+            client,
+            refresh_token,
+            access_token: RwLock::new(access),
+            account: String::new(),
+        };
         gmail.account = gmail.get("/profile")?["emailAddress"].as_str().unwrap_or_default().to_lowercase();
         Ok(gmail)
     }
@@ -76,7 +84,11 @@ impl Gmail {
             if status >= 400 {
                 return Err(Error::with(ErrorCode::Gmail, format!("{status} {text}")));
             }
-            return Ok(if text.is_empty() { Value::Null } else { serde_json::from_str(&text)? });
+            return Ok(if text.is_empty() {
+                Value::Null
+            } else {
+                serde_json::from_str(&text)?
+            });
         }
         Err(ErrorCode::GmailBusy.into())
     }
@@ -98,14 +110,25 @@ impl Gmail {
     }
 
     pub fn user_labels(&self) -> Result<Vec<(String, String)>> {
-        Ok(self.get("/labels")?["labels"].as_array().into_iter().flatten()
+        Ok(self.get("/labels")?["labels"]
+            .as_array()
+            .into_iter()
+            .flatten()
             .filter(|l| l["type"] == "user")
-            .map(|l| (l["id"].as_str().unwrap_or_default().to_string(), l["name"].as_str().unwrap_or_default().to_string()))
+            .map(|l| {
+                (
+                    l["id"].as_str().unwrap_or_default().to_string(),
+                    l["name"].as_str().unwrap_or_default().to_string(),
+                )
+            })
             .collect())
     }
 
     pub fn create_label(&self, name: &str) -> Result<String> {
-        let label = self.post("/labels", &json!({ "name": name, "labelListVisibility": "labelShow", "messageListVisibility": "show" }))?;
+        let label = self.post(
+            "/labels",
+            &json!({ "name": name, "labelListVisibility": "labelShow", "messageListVisibility": "show" }),
+        )?;
         Ok(label["id"].as_str().unwrap_or_default().to_string())
     }
 
@@ -125,7 +148,13 @@ impl Gmail {
                 path += &format!("&pageToken={}", encode(p));
             }
             let response = self.get(&path)?;
-            ids.extend(response["messages"].as_array().into_iter().flatten().filter_map(|m| m["id"].as_str().map(String::from)));
+            ids.extend(
+                response["messages"]
+                    .as_array()
+                    .into_iter()
+                    .flatten()
+                    .filter_map(|m| m["id"].as_str().map(String::from)),
+            );
             page = response["nextPageToken"].as_str().map(String::from);
             if page.is_none() {
                 break;
@@ -142,7 +171,10 @@ impl Gmail {
 
     pub fn modify(&self, ids: &[String], add: &[&str], remove: &[&str]) -> Result<()> {
         for batch in ids.chunks(BATCH_SIZE) {
-            self.post("/messages/batchModify", &json!({ "ids": batch, "addLabelIds": add, "removeLabelIds": remove }))?;
+            self.post(
+                "/messages/batchModify",
+                &json!({ "ids": batch, "addLabelIds": add, "removeLabelIds": remove }),
+            )?;
         }
         Ok(())
     }
@@ -152,16 +184,30 @@ impl Gmail {
         let ids = self.search(query, limit)?;
         let done = AtomicUsize::new(0);
         let messages = parallel(&ids, |id| {
-            let message = self.get(&format!("/messages/{id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject"));
+            let message = self.get(&format!(
+                "/messages/{id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject"
+            ));
             let n = done.fetch_add(1, Ordering::Relaxed) + 1;
             if n.is_multiple_of(PROGRESS_EVERY) || n == ids.len() {
                 report(Progress::new(Phase::Reading, n, ids.len()));
             }
             message.ok().map(|m| {
-                let header = |name: &str| m["payload"]["headers"].as_array().into_iter().flatten()
-                    .find(|h| h["name"] == name).and_then(|h| h["value"].as_str()).unwrap_or_default().to_string();
+                let header = |name: &str| {
+                    m["payload"]["headers"]
+                        .as_array()
+                        .into_iter()
+                        .flatten()
+                        .find(|h| h["name"] == name)
+                        .and_then(|h| h["value"].as_str())
+                        .unwrap_or_default()
+                        .to_string()
+                };
                 let from = header("From");
-                Message { from: email_of(&from), name: name_of(&from), subject: header("Subject") }
+                Message {
+                    from: email_of(&from),
+                    name: name_of(&from),
+                    subject: header("Subject"),
+                }
             })
         });
         let failed = messages.iter().filter(|m| m.is_none()).count();
@@ -174,11 +220,13 @@ pub fn parallel<T: Sync, R: Send>(items: &[T], f: impl Fn(&T) -> R + Sync) -> Ve
     let out = Mutex::new(Vec::with_capacity(items.len()));
     thread::scope(|s| {
         for _ in 0..THREADS.min(items.len()) {
-            s.spawn(|| loop {
-                let i = next.fetch_add(1, Ordering::Relaxed);
-                let Some(item) = items.get(i) else { break };
-                let r = f(item);
-                out.lock().unwrap().push((i, r));
+            s.spawn(|| {
+                loop {
+                    let i = next.fetch_add(1, Ordering::Relaxed);
+                    let Some(item) = items.get(i) else { break };
+                    let r = f(item);
+                    out.lock().unwrap().push((i, r));
+                }
             });
         }
     });

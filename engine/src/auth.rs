@@ -29,7 +29,10 @@ impl Client {
         let v: Value = serde_json::from_str(text).map_err(|_| Error::new(ErrorCode::InvalidCredentials))?;
         let installed = &v["installed"];
         let id = installed["client_id"].as_str().ok_or(ErrorCode::NotDesktopClient)?;
-        Ok(Self { id: id.into(), secret: installed["client_secret"].as_str().unwrap_or_default().into() })
+        Ok(Self {
+            id: id.into(),
+            secret: installed["client_secret"].as_str().unwrap_or_default().into(),
+        })
     }
 }
 
@@ -59,8 +62,16 @@ pub fn save_credentials(storage: &Storage, text: &str) -> Result<()> {
 }
 
 pub fn refresh(agent: &ureq::Agent, client: &Client, refresh_token: &str) -> Result<String> {
-    let form = [("grant_type", "refresh_token"), ("refresh_token", refresh_token), ("client_id", &client.id), ("client_secret", &client.secret)];
-    Ok(request_token(agent, &form)?["access_token"].as_str().unwrap_or_default().to_string())
+    let form = [
+        ("grant_type", "refresh_token"),
+        ("refresh_token", refresh_token),
+        ("client_id", &client.id),
+        ("client_secret", &client.secret),
+    ];
+    Ok(request_token(agent, &form)?["access_token"]
+        .as_str()
+        .unwrap_or_default()
+        .to_string())
 }
 
 pub fn login(agent: &ureq::Agent, client: &Client, page: &LoginPage) -> Result<(String, String)> {
@@ -72,7 +83,10 @@ pub fn login(agent: &ureq::Agent, client: &Client, page: &LoginPage) -> Result<(
     let url = format!(
         "{AUTHORIZE_URL}?response_type=code&access_type=offline&prompt=select_account%20consent\
          &client_id={}&redirect_uri={}&scope={}&state={state}&code_challenge_method=S256&code_challenge={}",
-        encode(&client.id), encode(&redirect), encode(SCOPES), b64(Sha256::digest(&verifier)),
+        encode(&client.id),
+        encode(&redirect),
+        encode(SCOPES),
+        b64(Sha256::digest(&verifier)),
     );
     open::that(&url)?;
 
@@ -94,8 +108,13 @@ pub fn login(agent: &ureq::Agent, client: &Client, page: &LoginPage) -> Result<(
         let n = stream.read(&mut buf)?;
         let request = String::from_utf8_lossy(&buf[..n]);
         let path = request.split_whitespace().nth(1).unwrap_or_default();
-        let query: HashMap<&str, String> = path.split_once('?').map_or("", |(_, q)| q)
-            .split('&').filter_map(|p| p.split_once('=')).map(|(k, v)| (k, decode(v))).collect();
+        let query: HashMap<&str, String> = path
+            .split_once('?')
+            .map_or("", |(_, q)| q)
+            .split('&')
+            .filter_map(|p| p.split_once('='))
+            .map(|(k, v)| (k, decode(v)))
+            .collect();
         if !query.contains_key("code") && !query.contains_key("error") {
             let _ = stream.write_all(b"HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n");
             continue;
@@ -104,9 +123,17 @@ pub fn login(agent: &ureq::Agent, client: &Client, page: &LoginPage) -> Result<(
         if query.get("state") != Some(&state) {
             return Err(ErrorCode::LoginMismatch.into());
         }
-        let code = query.get("code").ok_or_else(|| Error::with(ErrorCode::LoginDenied, query.get("error").map_or("", |e| e)))?;
-        let form = [("grant_type", "authorization_code"), ("code", code), ("code_verifier", &verifier),
-                    ("redirect_uri", &redirect), ("client_id", &client.id), ("client_secret", &client.secret)];
+        let code = query
+            .get("code")
+            .ok_or_else(|| Error::with(ErrorCode::LoginDenied, query.get("error").map_or("", |e| e)))?;
+        let form = [
+            ("grant_type", "authorization_code"),
+            ("code", code),
+            ("code_verifier", &verifier),
+            ("redirect_uri", &redirect),
+            ("client_id", &client.id),
+            ("client_secret", &client.secret),
+        ];
         let v = request_token(agent, &form)?;
         let access = v["access_token"].as_str().unwrap_or_default().to_string();
         let refresh = v["refresh_token"].as_str().ok_or(ErrorCode::NoRefreshToken)?.to_string();
@@ -116,5 +143,9 @@ pub fn login(agent: &ureq::Agent, client: &Client, page: &LoginPage) -> Result<(
 
 fn request_token(agent: &ureq::Agent, form: &[(&str, &str)]) -> Result<Value> {
     let v: Value = agent.post(TOKEN_URL).send_form(form.iter().copied())?.body_mut().read_json()?;
-    if v["access_token"].is_string() { Ok(v) } else { Err(Error::with(ErrorCode::TokenRejected, &v["error"])) }
+    if v["access_token"].is_string() {
+        Ok(v)
+    } else {
+        Err(Error::with(ErrorCode::TokenRejected, &v["error"]))
+    }
 }

@@ -41,19 +41,32 @@ fn filter(sender: &str, label: &str, action: Action) -> Value {
 }
 
 fn adds(filter: &Value, label: &str) -> bool {
-    filter["action"]["addLabelIds"].as_array().is_some_and(|a| a.iter().any(|x| x == label))
+    filter["action"]["addLabelIds"]
+        .as_array()
+        .is_some_and(|a| a.iter().any(|x| x == label))
 }
 
 fn is_simple(filter: &Value) -> bool {
-    filter["criteria"].as_object().is_some_and(|c| c.len() == 1 && c.contains_key("from"))
+    filter["criteria"]
+        .as_object()
+        .is_some_and(|c| c.len() == 1 && c.contains_key("from"))
 }
 
 fn user_labels_of(filter: &Value) -> impl Iterator<Item = &str> {
-    filter["action"]["addLabelIds"].as_array().into_iter().flatten().filter_map(Value::as_str).filter(|l| l.starts_with("Label_"))
+    filter["action"]["addLabelIds"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .filter(|l| l.starts_with("Label_"))
 }
 
 fn checked_id(id: &str) -> Result<&str> {
-    if !id.is_empty() && id.chars().all(|c| c.is_ascii_alphanumeric() || "-_".contains(c)) { Ok(id) } else { Err(ErrorCode::InvalidId.into()) }
+    if !id.is_empty() && id.chars().all(|c| c.is_ascii_alphanumeric() || "-_".contains(c)) {
+        Ok(id)
+    } else {
+        Err(ErrorCode::InvalidId.into())
+    }
 }
 
 fn checked_name(name: &str) -> Result<&str> {
@@ -65,27 +78,46 @@ fn checked_name(name: &str) -> Result<&str> {
 }
 
 pub(crate) fn destinations(filters: &[Value]) -> Vec<(String, String)> {
-    filters.iter().filter(|f| is_simple(f))
-        .filter_map(|f| Some((f["criteria"]["from"].as_str()?.to_lowercase(), user_labels_of(f).next()?.to_string())))
+    filters
+        .iter()
+        .filter(|f| is_simple(f))
+        .filter_map(|f| {
+            Some((
+                f["criteria"]["from"].as_str()?.to_lowercase(),
+                user_labels_of(f).next()?.to_string(),
+            ))
+        })
         .collect()
 }
 
 pub(crate) fn destination_of<'a>(destinations: &'a [(String, String)], email: &str) -> Option<&'a str> {
-    destinations.iter().find(|(from, _)| from == email)
+    destinations
+        .iter()
+        .find(|(from, _)| from == email)
         .or_else(|| destinations.iter().find(|(from, _)| email.ends_with(&format!("@{from}"))))
         .map(|(_, id)| id.as_str())
 }
 
 pub fn labels(gmail: &Gmail, settings: &Settings) -> Result<Vec<Label>> {
     let (own, filters) = (gmail.user_labels()?, gmail.filters()?);
-    let totals = parallel(&own, |(id, _)| gmail.get(&format!("/labels/{id}")).map_or(0, |l| l["messagesTotal"].as_u64().unwrap_or(0) as u32));
-    let mut labels: Vec<Label> = own.into_iter().zip(totals)
+    let totals = parallel(&own, |(id, _)| {
+        gmail
+            .get(&format!("/labels/{id}"))
+            .map_or(0, |l| l["messagesTotal"].as_u64().unwrap_or(0) as u32)
+    });
+    let mut labels: Vec<Label> = own
+        .into_iter()
+        .zip(totals)
         .map(|((id, name), total)| Label {
-            rules: filters.iter().filter(|f| adds(f, &id)).map(|f| Rule {
-                filter_id: f["id"].as_str().unwrap_or_default().into(),
-                sender: f["criteria"]["from"].as_str().unwrap_or_default().into(),
-                action: Action::of_filter(f),
-            }).collect(),
+            rules: filters
+                .iter()
+                .filter(|f| adds(f, &id))
+                .map(|f| Rule {
+                    filter_id: f["id"].as_str().unwrap_or_default().into(),
+                    sender: f["criteria"]["from"].as_str().unwrap_or_default().into(),
+                    action: Action::of_filter(f),
+                })
+                .collect(),
             protected: settings.is_protected(&name),
             id,
             name,
@@ -97,7 +129,11 @@ pub fn labels(gmail: &Gmail, settings: &Settings) -> Result<Vec<Label>> {
 }
 
 pub fn apply(gmail: &Gmail, groups: &[Group], report: Report) -> Result<()> {
-    let mut ids: HashMap<String, String> = gmail.user_labels()?.into_iter().map(|(id, name)| (name.to_lowercase(), id)).collect();
+    let mut ids: HashMap<String, String> = gmail
+        .user_labels()?
+        .into_iter()
+        .map(|(id, name)| (name.to_lowercase(), id))
+        .collect();
     let filters = gmail.filters()?;
     let destinations = destinations(&filters);
     for group in groups {
@@ -121,15 +157,29 @@ pub fn apply(gmail: &Gmail, groups: &[Group], report: Report) -> Result<()> {
         for sender in &group.senders {
             report(Progress::about(Phase::Applying, format!("{} → {name}", sender.email), done, total));
             let wanted = filter(&sender.email, &id, group.action);
-            let mut previous: Vec<String> = destination_of(&destinations, &sender.email).filter(|old| *old != id).map(String::from).into_iter().collect();
-            for f in filters.iter().filter(|f| is_simple(f) && f["criteria"]["from"] == sender.email.as_str() && !adds(f, &id)) {
+            let mut previous: Vec<String> = destination_of(&destinations, &sender.email)
+                .filter(|old| *old != id)
+                .map(String::from)
+                .into_iter()
+                .collect();
+            for f in filters
+                .iter()
+                .filter(|f| is_simple(f) && f["criteria"]["from"] == sender.email.as_str() && !adds(f, &id))
+            {
                 gmail.delete(&format!("/settings/filters/{}", checked_id(f["id"].as_str().unwrap_or_default())?))?;
                 previous.extend(user_labels_of(f).map(String::from));
             }
-            if !filters.iter().any(|f| f["criteria"] == wanted["criteria"] && f["action"] == wanted["action"]) {
+            if !filters
+                .iter()
+                .any(|f| f["criteria"] == wanted["criteria"] && f["action"] == wanted["action"])
+            {
                 gmail.post("/settings/filters", &wanted)?;
             }
-            let existing = if group.action == Action::Trash { Action::Label } else { group.action };
+            let existing = if group.action == Action::Trash {
+                Action::Label
+            } else {
+                group.action
+            };
             let (add, mut remove) = existing.changes(&id);
             remove.extend(previous.iter().map(String::as_str));
             gmail.modify(&gmail.search(&format!("from:({})", sender.email), usize::MAX)?, &add, &remove)?;
@@ -141,16 +191,28 @@ pub fn apply(gmail: &Gmail, groups: &[Group], report: Report) -> Result<()> {
 }
 
 pub fn change_action(gmail: &Gmail, label_id: &str, action: Action) -> Result<()> {
-    for f in gmail.filters()?.iter().filter(|f| adds(f, label_id) && is_simple(f) && Action::of_filter(f) != action) {
+    for f in gmail
+        .filters()?
+        .iter()
+        .filter(|f| adds(f, label_id) && is_simple(f) && Action::of_filter(f) != action)
+    {
         gmail.delete(&format!("/settings/filters/{}", checked_id(f["id"].as_str().unwrap_or_default())?))?;
-        gmail.post("/settings/filters", &filter(f["criteria"]["from"].as_str().unwrap_or_default(), label_id, action))?;
+        gmail.post(
+            "/settings/filters",
+            &filter(f["criteria"]["from"].as_str().unwrap_or_default(), label_id, action),
+        )?;
     }
     Ok(())
 }
 
 pub fn rename_label(gmail: &Gmail, label_id: &str, name: &str) -> Result<String> {
     let id = checked_id(label_id)?;
-    let old = gmail.user_labels()?.into_iter().find(|(l, _)| l == id).map(|(_, n)| n).ok_or(ErrorCode::InvalidId)?;
+    let old = gmail
+        .user_labels()?
+        .into_iter()
+        .find(|(l, _)| l == id)
+        .map(|(_, n)| n)
+        .ok_or(ErrorCode::InvalidId)?;
     gmail.patch(&format!("/labels/{id}"), &json!({ "name": checked_name(name)? }))?;
     Ok(old)
 }
@@ -184,7 +246,10 @@ mod tests {
 
     #[test]
     fn exact_rules_win_over_domain_rules() {
-        let d = destinations(&[filter("linkedin.com", "Label_1", Action::Label), filter("jobs@linkedin.com", "Label_2", Action::Archive)]);
+        let d = destinations(&[
+            filter("linkedin.com", "Label_1", Action::Label),
+            filter("jobs@linkedin.com", "Label_2", Action::Archive),
+        ]);
         assert_eq!(destination_of(&d, "jobs@linkedin.com"), Some("Label_2"));
         assert_eq!(destination_of(&d, "news@linkedin.com"), Some("Label_1"));
         assert_eq!(destination_of(&d, "other@x.com"), None);

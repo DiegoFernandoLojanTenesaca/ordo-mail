@@ -30,6 +30,10 @@ Rules are Gmail filters, so they run on Google's servers 24/7 (phone included) =
 
 Details in [SECURITY.md](SECURITY.md).
 
+## Download
+
+Get `ordo-<version>.exe` from [Releases](https://github.com/DiegoFernandoLojanTenesaca/ordo-mail/releases/latest) and run it.
+
 ## Requirements
 
 - Windows 10 or 11.
